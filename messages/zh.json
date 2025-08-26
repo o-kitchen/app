@@ -21,6 +21,11 @@
     "anonymous": "匿名",
     "fanworkLover": "同人爱好者"
   },
+  "feedHeader":{
+    "follow": "关注",
+    "home": "发现",
+    "latest": "最新"
+  },
   "common": {
     "loading": "加载中...",
     "error": "错误",
@@ -47,7 +52,7 @@
   },
   "home": {
     "title": "o-kitchen",
-    "subtitle": "链上厨房:",
+    "subtitle": "o厨房:",
     "subtitleFull": "为爱发电的自由创作港",
     "description": "o-kitchen是一个非营利的去中心化社交平台，基于开源区块链协议，专为同人作品创作而生。保护创作者的创作自由和发布权利。",
     "connectWallet": "连接钱包",
@@ -235,5 +240,104 @@
     },
     "copyright": "© 2025 o-kitchen. 为去中心化同人创作网络倾情打造 ❤️",
     "poweredBy": "技术支持"
+  },
+  "what-is-chip": {
+    "title": "什么是",
+    "subtitle": "链上证明",
+    "description": "链上证明是一种基于区块链技术的原创作品认证系统，为每一份原创内容提供不可篡改的所有权证明。",
+    "whatIsChip": {
+      "descriptionTitle":"链上证明是什么？",
+      "descriptionParagraph1": "链上证明是 o-kitchen 平台采用的区块链的发布数据认证系统。当用户发布内容时，系统将自动为该数据生成链上证明。",
+      "descriptionParagraph2": "每个链上证明都拥有独一无二的证明ID，这个ID连同发布时间戳、数据摘要、发布者信息等关键数据一起被永久记录在区块链上，形成不可篡改的数字证书。",
+      "descriptionParagraph3": "这确保了发布数据的完整性和可追溯性，也为整个社区提供了透明、可信的数据验证机制。"
+    },
+    "start":{
+      "button1":"连接发布内容",
+      "button2":"探索作品"
+    },
+    "core":{
+      "title":"核心理念",
+      "description": " “让每一份发布都有迹可循，让每一次数据都受到保护” —— 链上证明致力于在去中心化的世界中建立可信的数据认证体系。"
+    },
+    "onchainProof":"链上证明",
+    "certificate": {
+      "verified": "已验证",
+      "certificateId": "证书ID",
+      "creator": "创作者",
+      "createTime": "创建时间",
+      "blockchainStatus": "区块链状态",
+      "currentBlockChainStatus": "不可篡改",
+      "vetrifyStatus": "验证状态",
+      "currentVetrifyStatus": "数据已验证",
+      "viewOnBlockchain": "在区块链上查看"
+    },
+    "howItWorks": {
+      "title": "链上证明如何工作？",
+      "description": "简单三步，为您的发布数据获得区块链认证",
+      "step1": {
+        "title": "数据提交",
+        "description": "当您发布内容时，系统将自动为该数据生成独特的链上证明，记录发布时间和数据摘要。"
+      },
+      "step2": {
+        "title": "区块链记录",
+        "description": "系统自动生成唯一的证明ID，并将数据摘要、发布者信息、时间戳等关键信息记录到区块链上。"
+      },
+      "step3": {
+        "title": "获得认证",     
+        "description": "您的数据获得链上证明，任何人都可以通过证明ID验证发布数据的完整性和真实性。"
+      }
+    },
+    "benefits": {
+      "title": "链上证明的优势",
+      "reasons": "为什么选择链上证明来认证您的发布数据？",
+      "reason1": {
+        "title": "防伪保护",
+        "description": "区块链技术确保证明无法被伪造或篡改"
+      },
+      "reason2": {
+        "title": "唯一标识",
+        "description": "每个证明都有独特的ID，便于追踪和验证"
+      },
+      "reason3": {
+        "title": "公开透明",
+        "description": "所有人都可以查看和验证证明的真实性"
+      },
+      "reason4": {
+        "title": "永久保存",
+        "description": "证明信息永久存储，不会丢失或损坏"
+      }
+    },
+    "whyOkitchen": {
+      "title": "为什么选择 o-kitchen ？",
+      "description": "我们致力于为创作者社区提供最佳的创作与社交体验",
+      "reason1": {
+        "title": "社区驱动",
+        "subtitle":"由创作者社区共同治理和发展",
+        "description": "o-kitchenn 未来将是一个完全由创作者社区驱动的平台，所有重要决策都由社区成员共同参与制定，确保平台始终服务于创作者的真实需求。"
+      },
+      "reason2": {
+        "title": "开源透明",
+        "subtitle":"基于开源区块链协议构建",
+        "description": "我们的技术栈完全开源，任何人都可以审查代码、提出改进建议。透明的技术架构确保了平台的可信度和安全性。"
+      },
+      "reason3": {
+        "title": "非营利性质",
+        "subtitle":"专注于服务创作者，不以盈利为目的",
+        "description": "作为非营利平台，我们的唯一目标是为创作者提供更好的服务。所有收入都将用于平台的维护和发展，绝不会为了商业利益而牺牲用户体验。"
+      },
+      "reason4": {
+        "title": "技术先进",
+        "subtitle":"采用最新的Web3技术栈",
+        "description": "基于 Lens Protocol、Grove Storage  等先进的Web3技术构建，确保平台具有最佳的性能、安全性和用户体验。"
+      }
+    },
+    "callToAction": {
+      "title": "开始使用链上证明",
+      "subtitle": "认证您的发布数据，加入去中心化创作社区",
+      "description": "让每一份创作都能在这片海域自由航行 🚢✨",
+      "button1": "立即加入",
+      "button2": "连接加入",
+      "button3": "探索社区"
+    }
   }
 }

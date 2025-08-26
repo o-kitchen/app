@@ -54,6 +54,7 @@ import { UnifiedEditor } from "@/components/editer/UnifiedEditor"
 import { ToggleButton } from "@/components/editer/ToggleButton"
 import { ImageUpload } from "@/components/editer/ImageUpload"
 import { handleOperationWith } from "@lens-protocol/client/viem"
+import { useTranslations } from "next-intl";
 
 
 interface UploadedImage {
