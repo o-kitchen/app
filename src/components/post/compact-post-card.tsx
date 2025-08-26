@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
+import { Avatar } from "@/components/ui/avatar";
 import { Post } from "@lens-protocol/client";
 import { resolveUrl } from "@/utils/resolve-url";
 import { formatTimestamp, checkIfOriginal, extractAttachments, getLicenseType } from "@/utils/post-helpers";
@@ -36,37 +36,38 @@ export function CompactPostCard({ post, disableNavigation = false }: CompactPost
   
   return (
     <Card 
-      className="overflow-hidden bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 group"
+      variant="holographic"
+      className="overflow-hidden transition-all duration-300 group cursor-pointer"
       style={{
         cursor: !disableNavigation ? 'pointer' : 'default'
       }}
       onClick={() => !disableNavigation && router.push(`/p/${post.id}`)}
     >
-      <CardContent className="p-0">
+      <div className="p-0">
         {/* Main image/content area */}
         {primaryImage ? (
           <div className="relative aspect-auto">
             <img
               src={primaryImage}
               alt="Post content"
-              className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-300"
+              className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-300 rounded-t-lg"
               loading="lazy"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-moebius-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg" />
           </div>
         ) : (
-          // Text-only post
-          <div className="p-4 min-h-[120px] flex items-center">
-            {/* Post Content */}
+          // Text-only post with cyber styling
+          <div className="p-4 min-h-[120px] flex items-center bg-gradient-to-br from-moebius-50/30 to-cyber-gold-50/20">
             <p className="text-gray-800 text-sm leading-relaxed line-clamp-4 dark:text-gray-200">
               {content}
             </p>
           </div>
         )}
         
-        {/* Title section */}
+        {/* Title section with gradient text */}
         {title !== "No title available" && (
           <div className="pl-3 pr-3 pt-2">
-            <p className="text-gray-800 text-sm font-semibold line-clamp-2 leading-relaxed dark:text-gray-200">
+            <p className="cyber-text text-sm font-semibold line-clamp-2 leading-relaxed">
               {title}
             </p>
           </div>
@@ -77,16 +78,15 @@ export function CompactPostCard({ post, disableNavigation = false }: CompactPost
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <Avatar 
-                className="w-6 h-6 flex-shrink-0 cursor-pointer hover:shadow-lg hover:ring-2 hover:ring-gray-400/50 transition-all duration-200"
+                src={avatar}
+                size="sm"
+                className="flex-shrink-0 cursor-pointer hover:shadow-lg hover:ring-2 hover:ring-moebius-400/50 transition-all duration-200 moebius-glow"
                 onClick={(e) => {
                   e.stopPropagation();
                   router.push(`/u/${handle}`);
                 }}
               >
-                <AvatarImage src={avatar} />
-                <AvatarFallback className="text-xs">
-                  {displayName.charAt(0)}
-                </AvatarFallback>
+                {displayName.charAt(0)}
               </Avatar>
               <span 
                 className="text-xs font-medium text-gray-700 truncate dark:text-gray-300 cursor-pointer hover:underline transition-all duration-200"
@@ -104,7 +104,7 @@ export function CompactPostCard({ post, disableNavigation = false }: CompactPost
           </div>
           <TokenIdDisplay uri={post.contentUri} isOriginal={isOriginal} licenseType={licenseType} />
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }

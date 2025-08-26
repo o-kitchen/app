@@ -1,6 +1,7 @@
 "use client";
 
-import { ActionIcon, Stack, Transition, Tooltip } from "@mantine/core";
+import { ActionIcon, Stack, Transition } from "@/components/ui";
+import { Tooltip } from "@/components/ui/tooltip";
 import { useViewportSize } from "@mantine/hooks";
 import { RefreshCw, ArrowUp, Plus } from "lucide-react";
 import { useFeedContext } from "@/contexts/feed-context";

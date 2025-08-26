@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, useMantineTheme } from '@mantine/core';
+import { Box } from '@/components/ui';
+import { useMantineTheme } from '@mantine/core';
 import { Post } from "@lens-protocol/client";
 import { PostCard } from "@/components/post/post-card";
 import { CompactPostCard } from "@/components/post/compact-post-card";

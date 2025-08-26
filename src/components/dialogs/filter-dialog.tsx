@@ -1,6 +1,7 @@
 "use client"
 
-import { Modal, Button, Card, Group, Stack, Text, UnstyledButton } from "@mantine/core"
+import { Modal, Button, Card, Group, Stack, Text } from "@/components/ui"
+import { UnstyledButton } from "@mantine/core"
 import { Settings, Globe, Star, AlertTriangle, Ban, Shield, Heart, Brain, Hash, Users } from "lucide-react"
 import { useState } from "react"
 import { useDisabled } from "@/utils/disabled"

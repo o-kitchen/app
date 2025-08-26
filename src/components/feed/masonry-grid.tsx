@@ -1,5 +1,6 @@
 import React from "react";
-import { Container, px, SimpleGrid, Skeleton, Stack, useMantineTheme, Box, Paper } from '@mantine/core';
+import { Container, SimpleGrid, Skeleton, Stack, Box, Paper } from '@/components/ui';
+import { px, useMantineTheme } from '@mantine/core';
 
 const getChild = (height: number) => <Skeleton height={height} radius="md" animate={false} />;
 const BASE_HEIGHT = 360;

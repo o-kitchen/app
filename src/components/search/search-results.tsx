@@ -1,5 +1,6 @@
 "use client"
-import { Stack, Text, Group, Card, Badge, Skeleton, useMantineColorScheme, useMantineTheme } from "@mantine/core"
+import { Stack, Text, Group, Card, Badge, Skeleton } from "@/components/ui"
+import { useMantineColorScheme, useMantineTheme } from "@mantine/core"
 import { Hash, User, FileText, Key } from "lucide-react"
 
 interface SearchResultsProps {

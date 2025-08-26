@@ -1,6 +1,7 @@
 "use client"
 
-import { Group, ActionIcon, Tabs, Box } from "@mantine/core"
+import { Group, ActionIcon, Box } from "@/components/ui"
+import { Tabs } from "@/components/ui/tabs"
 import { Search, Filter } from "lucide-react"
 import { useState } from "react"
 import { useDisabled } from "@/utils/disabled"

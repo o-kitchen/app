@@ -5,7 +5,7 @@ import "../globals.css";
 import ClientLayout from "./ClientLayout";
 import { routing } from "@/i18n/routing";
 
-export const dynamic = 'force-dynamic';
+// Remove global force-dynamic - let pages decide their own rendering strategy
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Avatar, Text, Group, Stack, Box, Image, ActionIcon, Tooltip } from '@mantine/core';
+import { Card, Avatar, Text, Group, Stack, Box, Image, ActionIcon } from '@/components/ui';
+import { Tooltip } from "@/components/ui/tooltip";
 import { TokenIdDisplay } from "@/components/token-id-display";
 import { Post } from "@lens-protocol/client";
 import { PostActionsBar } from "./post-actions-bar";

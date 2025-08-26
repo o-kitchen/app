@@ -1,79 +1,72 @@
-import * as React from "react"
+import { Card as MantineCard, Text } from '@mantine/core';
+import { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
 
-import { cn } from "@/lib/utils"
+interface CardProps {
+  className?: string;
+  children: React.ReactNode;
+  variant?: 'default' | 'holographic' | 'glow' | 'minimal';
+  padding?: string | number;
+  radius?: string | number;
+  withBorder?: boolean;
+  shadow?: string;
+}
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm dark:bg-gray-600 ",
-      className
-    )}
-    {...props}
-  />
-))
-Card.displayName = "Card"
+const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ variant = 'default', className, children, ...props }, ref) => {
+    const variantClasses = {
+      default: '',
+      holographic: 'holographic-card',
+      glow: 'moebius-glow',
+      minimal: 'bg-white/50 backdrop-blur-sm border border-moebius-200/30'
+    };
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-))
-CardHeader.displayName = "CardHeader"
+    return (
+      <MantineCard
+        ref={ref}
+        className={cn(
+          'transition-all duration-300',
+          variantClasses[variant],
+          className
+        )}
+        padding="md"
+        radius="md"
+        withBorder
+        shadow="sm"
+        {...props}
+      >
+        {children}
+      </MantineCard>
+    );
+  }
+);
 
-const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-))
-CardTitle.displayName = "CardTitle"
+Card.displayName = 'Card';
 
-const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-))
-CardDescription.displayName = "CardDescription"
+// Legacy components for compatibility
+const CardHeader = ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn('mb-4', className)} {...props}>{children}</div>
+);
 
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
+const CardTitle = ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <Text fw={600} size="lg" className={cn('cyber-text', className)} {...props}>
+    {children}
+  </Text>
+);
 
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-))
-CardFooter.displayName = "CardFooter"
+const CardDescription = ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <Text size="sm" c="dimmed" className={className} {...props}>
+    {children}
+  </Text>
+);
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+const CardContent = ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={className} {...props}>{children}</div>
+);
+
+const CardFooter = ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn('mt-4 pt-4 border-t border-gray-200/50', className)} {...props}>{children}</div>
+);
+
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter };
+export type { CardProps };

@@ -1,6 +1,7 @@
 "use client";
 
-import { ActionIcon, Tooltip } from "@mantine/core";
+import { ActionIcon } from "@/components/ui"
+import { Tooltip } from "@/components/ui/tooltip";
 import { LayoutDashboard, List } from "lucide-react";
 import { useFeedContext } from "@/contexts/feed-context";
 

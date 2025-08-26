@@ -1,6 +1,6 @@
 "use client";
 import { ConnectKitButton } from "connectkit";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface ConnectWalletButtonProps {
   text: string;
@@ -13,7 +13,11 @@ export const ConnectWalletButton = ({ text = "Login", className }: ConnectWallet
       {({ isConnected, show }) => {
         if (!isConnected) {
           return (
-            <Button variant="default" onClick={show} className={`harbor-button text-white font-semibold ${className}`}>
+            <Button 
+              variant="neon" 
+              onClick={show} 
+              className={`font-semibold ${className}`}
+            >
               {text}
             </Button>
           );
