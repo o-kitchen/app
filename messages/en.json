@@ -1,7 +1,7 @@
 {
   "navigation": {
-    "home": "Home",
-    "feed": "Feed",
+    "home": "About",
+    "feed": "Home",
     "onchainProof": "Onchain Proof",
     "discover": "Discover",
     "create": "Create",

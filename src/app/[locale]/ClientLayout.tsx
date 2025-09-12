@@ -26,7 +26,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
+      defaultTheme="light"
       enableSystem
       disableTransitionOnChange
     >
@@ -38,7 +38,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
                   <AuthManager />
                   <GlobalModals />
                   <Header />
-                  <main>{children}</main>
+                  <main className="pb-12 md:pt-0 md:ml-16">{children}</main>
                   <Footer />
                   <Toaster />
                 </FeedProvider>
