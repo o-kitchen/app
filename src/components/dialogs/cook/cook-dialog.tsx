@@ -1,7 +1,10 @@
 "use client"
 
-import { Modal, Group, Text, Stack } from "@mantine/core"
+import { Modal, Group, Stack, useMantineTheme, Text, Box, ActionIcon } from "@mantine/core"
+import { useState } from "react"
+import { X, Plus } from "lucide-react"
 import { CookButton } from "./cook-buttons"
+import { ArtDialog } from "../art/art-dialog"
 
 interface CookDialogProps {
   opened: boolean
@@ -11,62 +14,159 @@ interface CookDialogProps {
 }
 
 export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: CookDialogProps) {
+  const theme = useMantineTheme()
+  const [artDialogOpened, setArtDialogOpened] = useState(false)
+
   const cookOptions = [
     {
-      label: "Cook Moment",
-      color: "#ff6b6b",
-      bgColor: "rgba(255, 107, 107, 0.1)",
-      borderColor: "rgba(255, 107, 107, 0.3)",
+      label: "Moment",
+      description: "Capture memories",
+      icon: "🩵",
+      color: "#8b5cf6", // Purple
+      disabled: true,
     },
     {
-      label: "Cook Work",
-      color: "#ff6b6b",
-      bgColor: "rgba(255, 107, 107, 0.1)",
-      borderColor: "rgba(255, 107, 107, 0.3)",
+      label: "Art", 
+      description: "Create & share",
+      icon: "🎨",
+      color: "#06b6d4", // Cyan
+      disabled: false,
     },
     {
-      label: "Cook Event",
-      color: "#ff6b6b",
-      bgColor: "rgba(255, 107, 107, 0.1)",
-      borderColor: "rgba(255, 107, 107, 0.3)",
+      label: "Event",
+      description: "Virtual & IRL",
+      icon: "🎫",
+      color: "#8b5cf6", // Purple
+      disabled: true,
     },
   ]
 
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      centered
-      size="md"
-      overlayProps={{
-        backgroundOpacity: 0.25,
-        blur: 3,
-      }}
-      styles={{
-        content: {
-          background: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 255, 255, 0.2)",
-        },
-      }}
-    >
-      <Stack gap="lg" pt="md">
+    <>
+      <Modal
+        opened={opened}
+        onClose={onClose}
+        centered
+        size="md"
+        withCloseButton={false}
+        title=""
+        overlayProps={{
+          backgroundOpacity: 0.4,
+          blur: 4,
+        }}
+        styles={{
+          content: {
+            background: theme.colors.dark[8],
+            borderRadius: theme.radius.xl,
+            border: `1px solid ${theme.colors.dark[6]}`,
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+            padding: 0,
+          },
+        }}
+      >
+        <Box
+          style={{
+            padding: theme.spacing.xl,
+            background: theme.colors.dark[7],
+            borderRadius: `${theme.radius.xl}px ${theme.radius.xl}px 0 0`,
+            position: "relative",
+          }}
+        >
+          {/* Header Actions */}
+          <Group justify="space-between" mb="xl">
+            <ActionIcon
+              size="lg"
+              variant="filled"
+              color="dark.6"
+              radius="xl"
+              style={{
+                background: theme.colors.dark[6],
+                border: `1px solid ${theme.colors.dark[5]}`,
+              }}
+            >
+              <Plus size={16} color={theme.colors.gray[3]} />
+            </ActionIcon>
+            
+            <ActionIcon
+              size="lg"
+              variant="filled"
+              color="dark.6"
+              radius="xl"
+              onClick={onClose}
+              style={{
+                background: theme.colors.dark[6],
+                border: `1px solid ${theme.colors.dark[5]}`,
+              }}
+            >
+              <X size={16} color={theme.colors.gray[3]} />
+            </ActionIcon>
+          </Group>
 
-        <Group justify="center" gap="sm" wrap="nowrap">
-          {cookOptions.map((option) => (
-            <CookButton
-              key={option.label}
-              label={option.label}
-              color={option.color}
-              bgColor={option.bgColor}
-              borderColor={option.borderColor}
-              onClick={() => onButtonClick(option.label)}
-              disabled={option.label === "Cook Moment" || option.label === "Cook Event"}
-            />
-          ))}
-        </Group>
+          {/* Title Section */}
+          <Stack gap="sm" align="center" mb="lg">
+            <Text
+              size="2rem"
+              fw={700}
+              c="white"
+              style={{
+                fontFamily: theme.fontFamily,
+                letterSpacing: "-0.025em",
+              }}
+            >
+              Create
+            </Text>
+            <Text
+              size="lg"
+              c="gray.4"
+              style={{
+                fontFamily: theme.fontFamily,
+                fontWeight: 400,
+              }}
+            >
+              What are we creating today?
+            </Text>
+          </Stack>
+        </Box>
 
-      </Stack>
-    </Modal>
+        {/* Content Area */}
+        <Box
+          style={{
+            padding: theme.spacing.xl,
+            background: theme.colors.dark[8],
+            borderRadius: `0 0 ${theme.radius.xl}px ${theme.radius.xl}px`,
+          }}
+        >
+          <Group justify="center" gap="md" wrap="nowrap">
+            {cookOptions.map((option, index) => (
+              <CookButton
+                key={option.label}
+                label={option.label}
+                description={option.description}
+                icon={option.icon}
+                color={option.color}
+                onClick={() => {
+                  if (option.label === "Art") {
+                    setArtDialogOpened(true)
+                  } else {
+                    onButtonClick(option.label)
+                  }
+                }}
+                disabled={option.disabled}
+              />
+            ))}
+          </Group>
+        </Box>
+      </Modal>
+      
+      {/* Art Dialog */}
+      <ArtDialog 
+        opened={artDialogOpened} 
+        onClose={() => setArtDialogOpened(false)} 
+        onComplete={() => {
+          setArtDialogOpened(false)  
+          onClose()                  
+        }}
+      />
+    </>
   )
 }
