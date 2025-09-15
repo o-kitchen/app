@@ -8,7 +8,7 @@ import { FeedFloatingActions } from "@/components/feed/feed-floating-actions";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackButton } from "@/components/ui/back-button";
 import { StorageDisplay } from "@/components/ui/storage-display";
-import { CommentSection } from "@/components/ui/comment-section";
+import { CommentSection } from "@/components/comment/comment-section";
 import { useComments } from "@/hooks/use-comments";
 
 export default function PostPage() {
@@ -32,8 +32,8 @@ export default function PostPage() {
     comments,
     loading: commentsLoading,
     error: commentsError,
-    addComment,
-    refetch: refetchComments
+    refreshComments,
+    loadMoreComments
   } = useComments({
     postId,
     autoFetch: isInlineMode
@@ -77,9 +77,7 @@ export default function PostPage() {
         {/* Comments Section - Only show in inline mode */}
         {isInlineMode && (
           <CommentSection
-            postId={postId}
-            comments={comments}
-            onAddComment={addComment}
+            post={post}
             className="mt-4"
           />
         )}

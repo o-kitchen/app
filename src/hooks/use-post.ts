@@ -183,26 +183,9 @@ export function usePost(options: UsePostOptions): UsePostReturn {
   }, [fetchComments, commentsPageInfo, hasMoreComments, loadingMoreComments]);
   
   const refreshComments = useCallback(async (retryCount = 0, expectNew = false) => {
-    const maxRetries = 3;
-    const retryDelay = 1000; // 1 second
-    
-    if (retryCount === 0 && expectNew) {
-      // Only mark that we're expecting a new comment if explicitly told to
-      expectingNewComment.current = true;
-    }
-    
+    // For comment posting, we don't need complex retry logic
+    // Just refresh once and let the user see the result
     await fetchComments(undefined, true);
-    
-    // Only retry if:
-    // 1. We're expecting a new comment (e.g., after posting)
-    // 2. We haven't exceeded max retries
-    if (expectingNewComment.current && retryCount < maxRetries) {
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
-      return refreshComments(retryCount + 1, expectNew);
-    }
-    
-    // Reset expectation flag
-    expectingNewComment.current = false;
   }, [fetchComments]);
   
   // Manual comment setting function (for compatibility with existing code)
