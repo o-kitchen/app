@@ -1,9 +1,21 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { PageSize, Post } from "@lens-protocol/client";
+import { PageSize, Post, AnyPost } from "@lens-protocol/client";
 import { fetchPosts } from "@lens-protocol/client/actions";
 import { useSharedPostActions } from "@/contexts/post-actions-context";
 import { useLensAuthStore } from "@/stores/auth-store";
 import { useFeedContext } from "@/contexts/feed-context";
+
+// Helper function to filter out comments and replies
+export function isValidArticlePost(post: AnyPost): boolean {
+  return (
+    post.__typename === "Post" &&
+    // Check if it's not a comment or reply by ensuring it doesn't have root reference
+    // Main posts don't have a root (they are not comments on other posts)
+    !post.root &&
+    // Additional check: ensure it's a main post (not a comment)
+    post.metadata?.__typename !== undefined
+  );
+}
 
 type FeedType = "global" | "profile" | "custom";
 
@@ -89,7 +101,10 @@ export function useFeed(options: useFeedOptions = {}) {
         return;
       }
       
-      const filteredPosts = items.filter(item => item.__typename === 'Post') as Post[];
+      // Filter out comments and replies, keep only main posts
+      const filteredPosts = items
+        .filter(item => item.__typename === 'Post')
+        .filter(isValidArticlePost) as Post[];
 
       // Initialize post states for actions
       filteredPosts.forEach(post => {
@@ -137,7 +152,10 @@ export function useFeed(options: useFeedOptions = {}) {
       if (result.isErr()) return;
       
       const { items } = result.value;
-      const filteredPosts = items.filter(item => item.__typename === 'Post') as Post[];
+      // Filter out comments and replies, keep only main posts
+      const filteredPosts = items
+        .filter(item => item.__typename === 'Post')
+        .filter(isValidArticlePost) as Post[];
       if (filteredPosts.length > 0 && filteredPosts[0].id !== lastPostIdRef.current) {
         setNewPostsAvailable(true);
       }
@@ -199,7 +217,10 @@ export function useFeed(options: useFeedOptions = {}) {
           return;
         }
         
-        const filteredPosts = items.filter(item => item.__typename === 'Post') as Post[];
+        // Filter out comments and replies, keep only main posts
+      const filteredPosts = items
+        .filter(item => item.__typename === 'Post')
+        .filter(isValidArticlePost) as Post[];
 
         // Initialize post states for actions
         filteredPosts.forEach(post => {
@@ -235,7 +256,10 @@ export function useFeed(options: useFeedOptions = {}) {
         if (result.isErr()) return;
         
         const { items } = result.value;
-        const filteredPosts = items.filter(item => item.__typename === 'Post') as Post[];
+        // Filter out comments and replies, keep only main posts
+      const filteredPosts = items
+        .filter(item => item.__typename === 'Post')
+        .filter(isValidArticlePost) as Post[];
         if (filteredPosts.length > 0 && filteredPosts[0].id !== lastPostIdRef.current) {
           setNewPostsAvailable(true);
         }

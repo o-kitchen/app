@@ -80,33 +80,23 @@ export const PostActionsProvider = ({ children }: { children: ReactNode }) => {
   const initPostState = useCallback(
     (post: Post) => {
       setPostStates((prevStates) => {
-        const existingState = prevStates.get(post.id);
-        
-        // 如果状态已存在且用户会话状态没有变化，不要重复初始化
-        if (existingState && !isReady) {
-          return prevStates;
+        if (!prevStates.has(post.id)) {
+          const newStates = new Map(prevStates);
+          newStates.set(post.id, {
+            post: post,
+            stats: { ...post.stats },
+            operations: post.operations ? convertToBooleanOperations(post.operations) : { ...defaultOperations },
+            isCommentSheetOpen: false,
+            isCollectSheetOpen: false,
+            initialCommentUrlSynced: false,
+            initialCollectUrlSynced: false,
+          });
+          return newStates;
         }
-        
-        const newStates = new Map(prevStates);
-        
-        // 优先使用从sessionClient获取的operations，确保反映当前用户状态
-        const operations = (isReady && post.operations) 
-          ? convertToBooleanOperations(post.operations) 
-          : existingState?.operations || { ...defaultOperations };
-        
-        newStates.set(post.id, {
-          post: post,
-          stats: { ...post.stats },
-          operations,
-          isCommentSheetOpen: existingState?.isCommentSheetOpen || false,
-          isCollectSheetOpen: existingState?.isCollectSheetOpen || false,
-          initialCommentUrlSynced: existingState?.initialCommentUrlSynced || false,
-          initialCollectUrlSynced: existingState?.initialCollectUrlSynced || false,
-        });
-        return newStates;
+        return prevStates;
       });
     },
-    [defaultOperations, convertToBooleanOperations, isReady],
+    [defaultOperations, convertToBooleanOperations],
   );
 
   const getPostState = useCallback(
