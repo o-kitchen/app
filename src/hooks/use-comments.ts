@@ -92,6 +92,14 @@ export function useComments({
     [fetchComments]
   );
 
+  const refresh = useCallback(
+    async (retryCount = 0, expectNew = false) => {
+      // Alias for refreshComments to match fountain-app interface
+      await refreshComments(retryCount, expectNew);
+    },
+    [refreshComments]
+  );
+
 
   useEffect(() => {
     if (autoFetch && commentPostId) {
@@ -108,5 +116,6 @@ export function useComments({
     fetchComments,
     loadMoreComments,
     refreshComments,
+    refresh,
   };
 }

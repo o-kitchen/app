@@ -6,11 +6,7 @@ import { textOnly } from "@lens-protocol/metadata";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { MessageCircle, Send, Heart, Reply, MoreHorizontal } from "lucide-react";
-import { resolveUrl } from "@/utils/resolve-url";
-import { formatTimestamp } from "@/utils/post-helpers";
+import { MessageCircle, Send } from "lucide-react";
 import { useComments } from "@/hooks/use-comments";
 import { usePostActions } from "@/hooks/post-actions/use-post-actions";
 import { useSharedPostActions } from "@/contexts/post-actions-context";
@@ -18,6 +14,7 @@ import { useLensAuthStore } from "@/stores/auth-store";
 import { storageClient } from "@/lib/storage-client";
 import { useWalletClient } from "wagmi";
 import { toast } from "sonner";
+import { CommentView } from "./comment-view";
 
 interface CommentSectionProps {
   post: AnyPost;
@@ -68,7 +65,7 @@ export function CommentSection({
   const canComment = postState?.operations?.canComment ?? false;
 
   // Get auth and wallet client
-  const { client, sessionClient } = useLensAuthStore();
+  const { sessionClient } = useLensAuthStore();
   const { data: walletClient } = useWalletClient();
 
   const handleSubmitComment = async () => {
@@ -144,8 +141,6 @@ export function CommentSection({
     }
   };
 
-  // canComment is already defined above from post-actions-context
-
   return (
     <Card className={className}>
       <CardHeader>
@@ -156,39 +151,26 @@ export function CommentSection({
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Comment Input */}
-        {canComment && (
-          <div className="space-y-3">
-            <Textarea
-              placeholder="Write a comment..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              onKeyPress={handleKeyPress}
-              disabled={isSubmitting}
-              className="min-h-[80px] resize-none text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
-            />
-            <div className="flex justify-end">
-              <Button 
-                onClick={handleSubmitComment}
-                disabled={!newComment.trim() || isSubmitting}
-                className="flex items-center gap-2"
-              >
-                <Send className="w-4 h-4" />
-                {isSubmitting ? "Posting..." : "Comment"}
-              </Button>
-            </div>
+        <div className="space-y-3">
+          <Textarea
+            placeholder="Write a comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={isSubmitting}
+            className="min-h-[80px] resize-none text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
+          />
+          <div className="flex justify-end">
+            <Button 
+              onClick={handleSubmitComment}
+              disabled={!newComment.trim() || isSubmitting}
+              className="flex items-center gap-2"
+            >
+              <Send className="w-4 h-4" />
+              {isSubmitting ? "Posting..." : "Comment"}
+            </Button>
           </div>
-        )}
-        
-        {!canComment && (
-          <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-            {!sessionClient?.isSessionClient() 
-              ? "Please connect your wallet to comment" 
-              : !isLoggedIn 
-                ? "Please login to comment" 
-                : "Commenting is not allowed on this post"
-            }
-          </div>
-        )}
+        </div>
 
         {/* Comments List */}
         <div className="space-y-4">
@@ -202,9 +184,12 @@ export function CommentSection({
             </div>
           ) : (
             comments.map((comment) => (
-              <CommentItem
+              <CommentView
                 key={comment.id}
                 comment={comment}
+                nestingLevel={1}
+                maxNestingLevel={4}
+                autoShowReplies={false}
               />
             ))
           )}
@@ -214,72 +199,5 @@ export function CommentSection({
   );
 }
 
-interface CommentItemProps {
-  comment: AnyPost;
-}
-
-function CommentItem({
-  comment
-}: CommentItemProps) {
-  // Only render if it's a Post
-  if (comment.__typename !== "Post") {
-    return null;
-  }
-
-  // Get post actions for this specific comment
-  const { handleLike, stats, operations, isLoggedIn } = usePostActions(comment);
-  
-  const displayName = comment.author?.metadata?.name || 
-                     comment.author?.username?.localName || 
-                     "Anonymous";
-  const avatar = comment.author?.metadata?.picture ? 
-                 resolveUrl(comment.author.metadata.picture) : 
-                 "/gull.jpg";
-
-  return (
-    <div className="space-y-3">
-      <div className="flex gap-3">
-        <Avatar className="w-8 h-8 flex-shrink-0">
-          <AvatarImage src={avatar} />
-          <AvatarFallback className="text-xs">
-            {displayName.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        
-        <div className="flex-1 min-w-0">
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
-                {displayName}
-              </span>
-              <Badge variant="outline" className="text-xs">
-                {formatTimestamp(comment.timestamp)}
-              </Badge>
-            </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-              {comment.__typename === "Post" && "content" in comment.metadata && comment.metadata.content}
-            </p>
-            
-            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-              <button
-                onClick={handleLike}
-                disabled={!isLoggedIn}
-                className={`flex items-center gap-1 transition-colors ${
-                  operations?.hasUpvoted 
-                    ? "text-red-500 dark:text-red-400" 
-                    : "hover:text-red-500 dark:hover:text-red-400"
-                } ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}`}
-              >
-                <Heart className={`w-3 h-3 ${operations?.hasUpvoted ? "fill-current" : ""}`} />
-                {stats?.upvotes || 0}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  );
-}
 
 
