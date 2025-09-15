@@ -7,16 +7,11 @@ import { fetchPostReferences } from '@lens-protocol/client/actions';
 interface UseCommentsProps {
   postId: string;
   autoFetch?: boolean;
-  // Comment filtering options
-  referenceTypes?: PostReferenceType[];
-  byAuthors?: string[];
 }
 
 export function useComments({ 
   postId: commentPostId, 
-  autoFetch = true, 
-  referenceTypes = [PostReferenceType.CommentOn],
-  byAuthors
+  autoFetch = true
 }: UseCommentsProps) {
   const [comments, setComments] = useState<AnyPost[]>([]);
   const [loading, setLoading] = useState(false);
@@ -25,9 +20,6 @@ export function useComments({
   const [pageInfo, setPageInfo] = useState<{ next?: string } | null>(null);
   const { client, sessionClient } = useLensAuthStore();
   
-  // Enhanced comment state for retry logic
-  const currentCommentCount = useRef<number>(0);
-  const expectingNewComment = useRef<boolean>(false);
 
   const fetchComments = useCallback(
     async (cursor?: string, isRefresh = false) => {
@@ -49,9 +41,7 @@ export function useComments({
         const lensClient = sessionClient || client;
         const result = await fetchPostReferences(lensClient, {
           referencedPost: commentPostId,
-          referenceTypes: referenceTypes,
-          // Add author filtering if specified
-          ...(byAuthors && byAuthors.length > 0 && { byAuthors }),
+          referenceTypes: [PostReferenceType.CommentOn],
           // Add pagination
           ...(cursor && { cursor }),
         });
@@ -84,7 +74,7 @@ export function useComments({
         setLoading(false);
       }
     },
-    [client, sessionClient, commentPostId, referenceTypes, byAuthors]
+    [client, sessionClient, commentPostId]
   );
 
   const loadMoreComments = useCallback(async () => {

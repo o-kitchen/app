@@ -11,8 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { MessageCircle, Send, Heart, Reply, MoreHorizontal } from "lucide-react";
 import { resolveUrl } from "@/utils/resolve-url";
 import { formatTimestamp } from "@/utils/post-helpers";
-import { usePost } from "@/hooks/use-post";
+import { useComments } from "@/hooks/use-comments";
 import { usePostActions } from "@/hooks/post-actions/use-post-actions";
+import { useSharedPostActions } from "@/contexts/post-actions-context";
 import { useLensAuthStore } from "@/stores/auth-store";
 import { storageClient } from "@/lib/storage-client";
 import { useWalletClient } from "wagmi";
@@ -28,8 +29,6 @@ export function CommentSection({
   className = ""
 }: CommentSectionProps) {
   const [newComment, setNewComment] = useState("");
-  const [replyTo, setReplyTo] = useState<string | null>(null);
-  const [replyContent, setReplyContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Early return if post is null or undefined
@@ -43,19 +42,30 @@ export function CommentSection({
     );
   }
   
-  // Use the usePost hook to get comments and operations
+  // Use the useComments hook to get comments
   const { 
     comments, 
-    commentsLoading, 
-    operations, 
-    isLoggedIn,
+    loading: commentsLoading, 
     refreshComments 
-  } = usePost({ postId: post.id });
+  } = useComments({ postId: post.id });
 
   // Get post actions for the main post (only if it's a Post)
-  const { handleLike: handlePostLike, stats: postStats, operations: postOperations } = usePostActions(
-    post.__typename === "Post" ? post : null as any
+  const { operations, isLoggedIn } = usePostActions(
+    post.__typename === "Post" ? post : null
   );
+
+  // Get shared post actions context for canComment logic
+  const { getPostState, initPostState } = useSharedPostActions();
+  
+  // Initialize post state if it's a Post
+  React.useEffect(() => {
+    if (post.__typename === "Post") {
+      initPostState(post);
+    }
+  }, [post, initPostState]);
+  
+  const postState = post.__typename === "Post" ? getPostState(post.id) : undefined;
+  const canComment = postState?.operations?.canComment ?? false;
 
   // Get auth and wallet client
   const { client, sessionClient } = useLensAuthStore();
@@ -63,25 +73,15 @@ export function CommentSection({
 
   const handleSubmitComment = async () => {
     if (!newComment.trim() || isSubmitting) return;
-    
-    if (!isLoggedIn) {
-      toast.error("Please login to comment");
-      return;
-    }
 
-    if (!walletClient) {
+    if(!sessionClient?.isSessionClient()) {
       toast.error("Please connect your wallet");
       return;
     }
 
-    // Check if user can comment based on post operations
-    if (!operations?.canComment) {
+    // Check if user can comment based on post operations from context
+    if (!canComment) {
       toast.error("Commenting is not allowed on this post");
-      return;
-    }
-
-    if (!sessionClient?.isSessionClient()) {
-      toast.error("Please log in to comment");
       return;
     }
 
@@ -136,81 +136,6 @@ export function CommentSection({
     }
   };
 
-  const handleSubmitReply = async (commentId: string) => {
-    if (!replyContent.trim() || isSubmitting) return;
-    
-    if (!isLoggedIn) {
-      toast.error("Please login to reply");
-      return;
-    }
-
-    if (!walletClient) {
-      toast.error("Please connect your wallet");
-      return;
-    }
-
-    // Check if user can comment based on post operations
-    if (!operations?.canComment) {
-      toast.error("Replying is not allowed on this post");
-      return;
-    }
-
-    if (!sessionClient?.isSessionClient()) {
-      toast.error("Please log in to reply");
-      return;
-    }
-
-    setIsSubmitting(true);
-    const pendingToast = toast.loading("Publishing reply...");
-
-    try {
-      // Create metadata for the reply
-      const metadata = textOnly({
-        content: replyContent.trim(),
-      });
-
-      // Upload metadata to storage
-      const { uri } = await storageClient.uploadAsJson(metadata);
-
-      // Create reply using Lens Protocol
-      const result = await createPost(sessionClient, {
-        contentUri: uri,
-        commentOn: {
-          post: commentId,
-        },
-      })
-        .andThen(handleOperationWith(walletClient))
-        .andThen(sessionClient.waitForTransaction);
-
-      if (result.isErr()) {
-        toast.dismiss(pendingToast);
-        toast.error("Failed to publish reply", {
-          description: result.error instanceof Error ? result.error.message : "An unknown error occurred",
-        });
-        console.error("Error publishing reply:", result.error);
-        return;
-      }
-
-      toast.dismiss(pendingToast);
-      toast.success("Reply published successfully!");
-      
-      setReplyContent("");
-      setReplyTo(null);
-      
-      // Add a small delay to ensure the transaction is confirmed
-      setTimeout(async () => {
-        await refreshComments(0, true);
-      }, 1000);
-    } catch (error) {
-      console.error('Failed to add reply:', error);
-      toast.dismiss(pendingToast);
-      toast.error("Failed to publish reply", {
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -219,8 +144,7 @@ export function CommentSection({
     }
   };
 
-  // Check if user can comment
-  const canComment = operations?.canComment && isLoggedIn;
+  // canComment is already defined above from post-actions-context
 
   return (
     <Card className={className}>
@@ -257,7 +181,12 @@ export function CommentSection({
         
         {!canComment && (
           <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-            {!isLoggedIn ? "Please login to comment" : "Commenting is not allowed on this post"}
+            {!sessionClient?.isSessionClient() 
+              ? "Please connect your wallet to comment" 
+              : !isLoggedIn 
+                ? "Please login to comment" 
+                : "Commenting is not allowed on this post"
+            }
           </div>
         )}
 
@@ -272,28 +201,12 @@ export function CommentSection({
               <p>No comments yet. Be the first to comment!</p>
             </div>
           ) : (
-            comments.map((comment) => {
-              if (comment.__typename !== "Post") return null;
-              
-              return (
-                <CommentItem
-                  key={comment.id}
-                  comment={comment}
-                  onLike={() => {}} // TODO: Implement like functionality
-                  onReply={() => setReplyTo(comment.id)}
-                  showReplyInput={replyTo === comment.id}
-                  replyContent={replyContent}
-                  onReplyContentChange={setReplyContent}
-                  onSubmitReply={() => handleSubmitReply(comment.id)}
-                  onCancelReply={() => {
-                    setReplyTo(null);
-                    setReplyContent("");
-                  }}
-                  canComment={canComment}
-                  isSubmitting={isSubmitting}
-                />
-              );
-            })
+            comments.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+              />
+            ))
           )}
         </div>
       </CardContent>
@@ -303,33 +216,18 @@ export function CommentSection({
 
 interface CommentItemProps {
   comment: AnyPost;
-  onLike: () => void;
-  onReply: () => void;
-  showReplyInput: boolean;
-  replyContent: string;
-  onReplyContentChange: (content: string) => void;
-  onSubmitReply: () => void;
-  onCancelReply: () => void;
-  canComment: boolean;
-  isSubmitting: boolean;
 }
 
 function CommentItem({
-  comment,
-  onLike,
-  onReply,
-  showReplyInput,
-  replyContent,
-  onReplyContentChange,
-  onSubmitReply,
-  onCancelReply,
-  canComment,
-  isSubmitting
+  comment
 }: CommentItemProps) {
-  // Get post actions for this specific comment (only if it's a Post)
-  const { handleLike, stats, operations, isLoggedIn } = usePostActions(
-    comment.__typename === "Post" ? comment : null as any
-  );
+  // Only render if it's a Post
+  if (comment.__typename !== "Post") {
+    return null;
+  }
+
+  // Get post actions for this specific comment
+  const { handleLike, stats, operations, isLoggedIn } = usePostActions(comment);
   
   const displayName = comment.author?.metadata?.name || 
                      comment.author?.username?.localName || 
@@ -375,52 +273,13 @@ function CommentItem({
                 <Heart className={`w-3 h-3 ${operations?.hasUpvoted ? "fill-current" : ""}`} />
                 {stats?.upvotes || 0}
               </button>
-              {canComment && (
-                <button
-                  onClick={onReply}
-                  className="flex items-center gap-1 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-                >
-                  <Reply className="w-3 h-3" />
-                  Reply
-                </button>
-              )}
-              <button className="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                <MoreHorizontal className="w-3 h-3" />
-              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Reply Input */}
-      {showReplyInput && canComment && (
-        <div className="ml-11 space-y-3">
-          <Textarea
-            placeholder="Write a reply..."
-            value={replyContent}
-            onChange={(e) => onReplyContentChange(e.target.value)}
-            disabled={isSubmitting}
-            className="min-h-[60px] resize-none text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
-          />
-          <div className="flex gap-2">
-            <Button 
-              size="sm"
-              onClick={onSubmitReply}
-              disabled={!replyContent.trim() || isSubmitting}
-            >
-              {isSubmitting ? "Posting..." : "Reply"}
-            </Button>
-            <Button 
-              size="sm" 
-              variant="outline"
-              onClick={onCancelReply}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
+
+

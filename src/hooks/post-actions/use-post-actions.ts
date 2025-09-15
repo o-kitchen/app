@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { resolveUrl } from "@/utils/resolve-url";
 
 // For single post actions
-export const usePostActions = (post: Post) => {
+export const usePostActions = (post: Post | null) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { getPostState, initPostState, updatePostState, updatePostStats, updatePostOperations } =
@@ -23,7 +23,7 @@ export const usePostActions = (post: Post) => {
     }
   }, [post, initPostState]);
   
-  const sharedState = getPostState(post.id);
+  const sharedState = post ? getPostState(post.id) : undefined;
 
   const defaultOperations = {
     hasUpvoted: false,
@@ -41,12 +41,12 @@ export const usePostActions = (post: Post) => {
 
   const { stats, operations, isCommentSheetOpen, isCollectSheetOpen } = useMemo(
     () => ({
-      stats: sharedState?.stats ?? post.stats,
+      stats: sharedState?.stats ?? post?.stats ?? { upvotes: 0, downvotes: 0, comments: 0, mirrors: 0, quotes: 0, bookmarks: 0, collects: 0 },
       operations: sharedState?.operations ?? defaultOperations,
       isCommentSheetOpen: sharedState?.isCommentSheetOpen ?? false,
       isCollectSheetOpen: sharedState?.isCollectSheetOpen ?? false,
     }),
-    [sharedState, post.stats, post.operations, defaultOperations],
+    [sharedState, post?.stats, post?.operations, defaultOperations],
   );
 
   const isCommentOpenParam = useMemo(
