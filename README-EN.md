@@ -1,6 +1,11 @@
+> [!WARNING]
+>  The o-kitchen app is still in prototyping and early development.
+
 # O-KITCHEN
 
-> Decentralized Harbor for Fandoms - Ship and Preserve Your Fanworks On-Chain
+ **[🇨🇳 中文](./README.md)  |  [🇺🇸 English](./README-EN.md)**
+
+> Decentralized Platform for Fandoms - Ship and Preserve Your Fanworks On-Chain
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2.16-black.svg)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://reactjs.org/)
@@ -10,14 +15,11 @@
 [![License: AGPL](https://img.shields.io/badge/License-AGPL-purple.svg)](https://opensource.org/licenses/agpl-v3)
 [![TanStack Query](https://img.shields.io/badge/TanStack_Query-5.75-orange.svg)](https://tanstack.com/query)
 
-> [!WARNING]
->  The o-kitchen app is still in prototyping and early development.
-
-## 🌟 Project Overview
+## 🩵 Project Overview
 
 **O-Kitchen** is a decentralized fandom platform that provides creators with a secure, open environment to share and preserve fan works. As an alternative to Tumblr, Pixiv, and Lofter, O-Kitchen leverages blockchain technology to ensure permanent preservation and complete ownership of creative works.
 
-### 🎯 Core Features
+## ✨ Core Features
 
 - **🚢 On-Chain Storage**: Permanent content storage powered by Lens Protocol
 - **🎨 Creation Tools**: Rich text editor with image and text composition support
@@ -28,7 +30,7 @@
 - **📱 Responsive Design**: Optimized mobile and desktop experience
 - **🎭 Fandom Culture**: Features specifically designed for fan creation communities
 
-## 🏗️ Technical Architecture
+## 🧱 Technical Architecture
 
 ### Tech Stack
 
@@ -43,12 +45,6 @@
 | **Real-time Communication** | XMTP React SDK                 | messaging                |
 | **Theme System**   | next-themes 0.4 + Mantine 8.2          | Dark/light theme switching             |
 
-### System Architecture Flow
-
-```
-User Creation → Rich Editor → Grove Storage → Lens Protocol → Decentralized Network → Content Discovery
-```
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -61,7 +57,7 @@ User Creation → Rich Editor → Grove Storage → Lens Protocol → Decentrali
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/o-kitchen.git
+git clone https://github.com/o-kitchen/app.git
 cd o-kitchen
 
 # Install dependencies
@@ -98,7 +94,6 @@ o-kitchen/
 ├── src/
 │   ├── app/                          # Next.js App Router pages
 │   │   ├── [locale]/                # Internationalized routes
-│   │   │   ├── create/              # Creation page
 │   │   │   ├── feed/                # Feed page
 │   │   │   ├── profile/             # User profile
 │   │   │   ├── discover/            # Content discovery
@@ -130,7 +125,7 @@ o-kitchen/
 
 ### 1. Connect Wallet
 
-Click the "Connect Wallet" button in the top right corner. Supports MetaMask, WalletConnect, and other major wallets.
+Click the "Connect Wallet" button in the top right corner. Supports mail-login, MetaMask, WalletConnect, and other major wallets.
 
 ### 2. Create Content
 
@@ -158,6 +153,8 @@ Click the "Connect Wallet" button in the top right corner. Supports MetaMask, Wa
 ```bash
 # Development
 pnpm dev                          # Start development server
+```
+```bash
 pnpm build                        # Build production version
 pnpm start                        # Start production server
 pnpm lint                         # Code linting
@@ -172,28 +169,12 @@ pnpm format:check                 # Check code format
 
 ## 🌐 Multilingual Support
 
-O-Kitchen supports the following languages:
+O-Kitchen currently supports the following languages:
 
 - 🇨🇳 Chinese Simplified
 - 🇺🇸 English
 
-Language switching is available in the language selector at the top right of the page.
-
-## 🔐 Security Considerations
-
-- ✅ Decentralized identity authentication
-- ✅ Encrypted content storage
-- ✅ Frontend input validation
-- ✅ Blockchain transaction security
-- ✅ Privacy protection mechanisms
-
-## 📊 Performance Optimization
-
-- ✅ Next.js Server-Side Rendering
-- ✅ Image lazy loading and optimization
-- ✅ Code splitting and dynamic imports
-- ✅ TanStack Query intelligent caching
-- ✅ Responsive images and assets
+Language switching is available in the language selector at the left of the page.
 
 ## 🤝 Contributing
 
@@ -201,7 +182,7 @@ We welcome community contributions! Please see our [Contributing Guide](./CONTRI
 
 ## 🛣️ Roadmap
 
-For detailed todo items, please see [todos.md](./txt/todos.md).
+For detailed todo items, please see [todos.md](./todos.md).
 
 ## 📄 License
 
@@ -209,10 +190,11 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE](./LICENS
 
 ## 🕊️ Support & Contact
 
-- 🐛 Issue Reports: [GitHub Issues](https://github.com/your-username/o-kitchen/issues)
-- 💬 Community Discussion: [GitHub Discussions](https://github.com/your-username/o-kitchen/discussions)
+- 📮 Mail: `rey.b.wu@gmail.com`
+- 👾 Reports: [Issues](https://github.com/o-kitchen/app/issues)
+- 💬 Discussion: [Discussions](https://github.com/orgs/o-kitchen/discussions)
 
 
 ⭐ If this project helps you, please give us a Star!
 
-**Made with ❤️ by the O-Kitchen community**
+**Made with 🩵 by the O-Kitchen community**

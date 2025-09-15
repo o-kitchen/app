@@ -24,7 +24,7 @@ Before contributing, please ensure you have:
 
 # 2. 克隆您的 fork
 # 2. Clone your fork
-git clone https://github.com/your-username/o-kitchen.git
+git clone https://github.com/o-kitchen/app.git
 cd o-kitchen
 
 # 3. 添加上游仓库

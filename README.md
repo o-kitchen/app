@@ -1,3 +1,6 @@
+> [!WARNING]
+>  O-Kitchen 应用仍在原型开发和早期开发阶段。
+
 # O-KITCHEN
 
  **[🇨🇳 中文](./README.md)  |  [🇺🇸 English](./README-EN.md)**
@@ -12,14 +15,11 @@
 [![License: AGPL](https://img.shields.io/badge/License-AGPL-purple.svg)](https://opensource.org/licenses/agpl-v3)
 [![TanStack Query](https://img.shields.io/badge/TanStack_Query-5.75-orange.svg)](https://tanstack.com/query)
 
-> [!WARNING]
->  O-Kitchen 应用仍在原型开发和早期开发阶段。
-
-## 🌟 项目概述
+## 🩵 项目概述
 
 **O-Kitchen** 是一个去中心化的同人平台，为创作者提供了一个安全、开放的环境来分享和保存同人作品。作为 Tumblr、Pixiv 和 Lofter 的替代方案，O-Kitchen 基于区块链技术，确保创作者的作品长期保存并拥有完全的所有权。
 
-### 🎯 核心功能
+## ✨ 核心功能
 
 - **🚢 链上存储**: 基于 Lens Protocol 的长期内容存储
 - **🎨 上传编辑**: 富文本编辑器，支持图片、文本混合创作
@@ -30,7 +30,7 @@
 - **📱 响应式设计**: 优化的移动端和桌面端体验
 - **🎭 同人文化**: 专为同人创作社区设计的功能
 
-## 🏗️ 技术架构
+## 🧱 技术架构
 
 ### 技术栈
 
@@ -45,12 +45,6 @@
 | **实时通信**      | XMTP React SDK                               | 消息传递                           |
 | **主题系统**      | next-themes 0.4 + Mantine 8.2               | 深色/浅色主题切换                          |
 
-### 系统架构流程
-
-```
-用户创作 → 富文本编辑 → Grove 存储 → Lens Protocol → 去中心化网络 → 内容发现
-```
-
 ## 🚀 快速开始
 
 ### 环境要求
@@ -63,7 +57,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/o-kitchen.git
+git clone https://github.com/o-kitchen/app.git
 cd o-kitchen
 
 # 安装依赖
@@ -100,10 +94,9 @@ o-kitchen/
 ├── src/
 │   ├── app/                          # Next.js App Router 页面
 │   │   ├── [locale]/                # 国际化路由
-│   │   │   ├── create/              # 创作页面
 │   │   │   ├── feed/                # 动态流页面
 │   │   │   ├── profile/             # 用户资料
-│   │   │   ├── discover/            # 内容发现
+│   │   │   ├── discover/            # 搜索器
 │   │   │   └── p/[postid]/         # 帖子详情
 │   │   └── globals.css              # 全局样式
 │   ├── components/
@@ -132,7 +125,7 @@ o-kitchen/
 
 ### 1. 连接钱包
 
-点击页面右上角的"连接钱包"按钮，支持 MetaMask、WalletConnect 等主流钱包。
+点击页面右上角的"连接钱包"按钮，支持 邮箱登录、MetaMask、WalletConnect 等主流钱包。
 
 ### 2. 创建内容
 
@@ -160,6 +153,9 @@ o-kitchen/
 ```bash
 # 开发
 pnpm dev                          # 启动开发服务器
+```
+
+```bash
 pnpm build                        # 构建生产版本
 pnpm start                        # 启动生产服务器
 pnpm lint                         # 代码检查
@@ -174,28 +170,12 @@ pnpm format:check                 # 检查代码格式
 
 ## 🌐 多语言支持
 
-O-Kitchen 支持以下语言：
+O-Kitchen 目前支持以下语言：
 
 - 🇨🇳 中文简体
 - 🇺🇸 English
 
-语言切换功能位于页面右上角的语言选择器中。
-
-## 🔐 安全考虑
-
-- ✅ 去中心化身份认证
-- ✅ 内容加密存储
-- ✅ 前端输入验证
-- ✅ 区块链交易安全
-- ✅ 隐私保护机制
-
-## 📊 性能优化
-
-- ✅ Next.js 服务端渲染
-- ✅ 图片懒加载和优化
-- ✅ 代码分割和动态导入
-- ✅ TanStack Query 智能缓存
-- ✅ 响应式图片和资源
+语言切换功能位于页面左侧的语言选择器中。
 
 ## 🤝 贡献指南
 
@@ -203,7 +183,7 @@ O-Kitchen 支持以下语言：
 
 ## 🛣️ 发展路线图
 
-详细的待办事项请查看 [todos.md](./txt/todos.md)。
+详细的待办事项请查看 [todos.md](./todos.md)。
 
 
 ## 📄 开源许可
@@ -212,10 +192,11 @@ O-Kitchen 支持以下语言：
 
 ## 🕊️ 支持与联系
 
-- 🐛 问题反馈: [GitHub Issues](https://github.com/your-username/o-kitchen/issues)
-- 💬 社区讨论: [GitHub Discussions](https://github.com/your-username/o-kitchen/discussions)
+- 📮 邮箱联系: `rey.b.wu@gmail.com`
+- 👾 问题反馈: [Issues](https://github.com/o-kitchen/app/issues)
+- 💬 社区讨论: [Discussions](https://github.com/orgs/o-kitchen/discussions)
 
 
 ⭐ 如果这个项目对你有帮助，请给我们一个 Star！
 
-**Made with ❤️ by the O-Kitchen Labs**
+**Made with 🩵 by the O-Kitchen Labs**

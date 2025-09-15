@@ -36,7 +36,7 @@
 - [ ] **Bundle 分析优化** - 使用 @next/bundle-analyzer 分析并优化包大小
 - [ ] **字体优化** - 配置字体子集化和 preload 策略
 - [ ] **图片懒加载策略** - 实施渐进式图片加载和 WebP/AVIF 转换
-- [ ] **移除未使用的 Radix UI 组件** - 清理冗余导入，减少 bundle 体积
+- [ ] **重构 UI 组件** - Radix —— >> Mantine  
 
 ### 缓存和数据加载优化 / Caching & Data Loading
 
@@ -87,7 +87,7 @@
 
 ### 性能相关技术债务 / Performance-Related Debt
 - [ ] **重构 force-dynamic 页面** - 将全局动态改为按需动态渲染
-- [ ] **优化 Radix UI 组件导入** - 使用按需导入减少 bundle 大小  
+- [ ] **重构 UI 组件** - Radix —— >> Mantine  
 - [ ] **减少客户端组件数量** - 将适合的组件迁移到服务端组件
 - [ ] **实施 React Server Components** - 逐步迁移到 RSC 架构
 - [ ] **优化状态管理粒度** - 避免不必要的全局状态重渲染
