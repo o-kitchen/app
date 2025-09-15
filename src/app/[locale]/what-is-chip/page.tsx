@@ -18,9 +18,11 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useAuthCheck } from "@/hooks/auth/use-auth-check";
 import { ConnectKitButton } from "connectkit";
+import { useTranslations } from "next-intl";
 
 export default function WhatIsChipPage() {
   const { isAuthenticated } = useAuthCheck();
+  const t = useTranslations("what-is-chip");
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-harbor-50/30">
@@ -37,14 +39,16 @@ export default function WhatIsChipPage() {
             </div>
 
             <h1 className="text-5xl sm:text-6xl font-bold text-neutral-900 mb-8 whitespace-nowrap">
-              <span className="align-middle dark:text-neutral-300">什么是</span>
+              <span className="align-middle dark:text-neutral-300">
+                {t("title")}
+              </span>
               <span className="bg-gradient-to-r from-chip-600 via-chip-500 to-chip-400 bg-clip-text text-transparent align-middle">
-                链上证明？
+                {t("subtitle")}
               </span>
             </h1>
 
             <p className="text-xl text-neutral-700 max-w-4xl mx-auto leading-relaxed mb-8 dark:text-neutral-300">
-              链上证明是基于区块链技术的发布数据认证系统，为每一份发布内容提供不可篡改的时间戳和数据完整性证明，确保发布记录的真实性和可追溯性。
+              {t("description")}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -64,7 +68,7 @@ export default function WhatIsChipPage() {
                       className="chip-button text-white font-semibold"
                       onClick={show}
                     >
-                      连接发布内容
+                      {t("start.button1")}
                     </Button>
                   )}
                 </ConnectKitButton.Custom>
@@ -75,7 +79,7 @@ export default function WhatIsChipPage() {
                 size="lg"
                 className="border-harbor-300 text-harbor-700 hover:bg-harbor-50 bg-transparent"
               >
-                <Link href="/feed">探索作品</Link>
+                <Link href="/feed">{t("start.button2")}</Link>
               </Button>
             </div>
           </div>
@@ -84,19 +88,18 @@ export default function WhatIsChipPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-neutral-900 mb-6">
-                  链上证明是什么？
+                <h2 className="text-3xl font-bold text-neutral-900 mb-6 dark:text-neutral-100">
+                  {t("whatIsChip.descriptionTitle")}
                 </h2>
                 <div className="space-y-4 text-lg text-neutral-700 leading-relaxed dark:text-neutral-300">
                   <p>
-                    链上证明是 o-kitchen
-                    平台采用的区块链的发布数据认证系统。当用户发布内容时，系统将自动为该数据生成链上证明。
+                    {t("whatIsChip.descriptionParagraph1")}
                   </p>
                   <p>
-                    每个链上证明都拥有独一无二的证明ID，这个ID连同发布时间戳、数据摘要、发布者信息等关键数据一起被永久记录在区块链上，形成不可篡改的数字证书。
+                    {t("whatIsChip.descriptionParagraph2")}
                   </p>
                   <p>
-                    这确保了发布数据的完整性和可追溯性，也为整个社区提供了透明、可信的数据验证机制。
+                    {t("whatIsChip.descriptionParagraph3")}
                   </p>
                 </div>
               </div>
@@ -105,12 +108,11 @@ export default function WhatIsChipPage() {
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="text-3xl">💡</div>
                   <h3 className="text-xl font-semibold text-harbor-800 dark:text-neutral-100">
-                    核心理念
+                    {t("core.title")}
                   </h3>
                 </div>
                 <p className="text-harbor-700 leading-relaxed dark:text-neutral-300">
-                  "让每一份发布都有迹可循，让每一次数据都受到保护" ——
-                  链上证明致力于在去中心化的世界中建立可信的数据认证体系。
+                  {t("core.description")}
                 </p>
               </div>
             </div>
@@ -123,13 +125,13 @@ export default function WhatIsChipPage() {
                     <div className="flex items-center space-x-3">
                       <div className="text-3xl">📜</div>
                       <div>
-                        <CardTitle className="text-2xl">链上证明</CardTitle>
+                        <CardTitle className="text-2xl">{t("onchainProof")}</CardTitle>
                         <p className="text-harbor-100 text-sm">Onchain Proof</p>
                       </div>
                     </div>
                     <Badge className="bg-white/20 text-white border-white/30 text-sm px-3 py-1">
                       <CheckCircle className="w-4 h-4 mr-1" />
-                      已验证
+                      {t("certificate.verified")}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -137,7 +139,7 @@ export default function WhatIsChipPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between py-2 border-b border-harbor-100">
                       <span className="text-neutral-600 font-medium dark:text-neutral-300">
-                        证明编号
+                        {t("certificate.certificateId")}
                       </span>
                       <div className="flex items-center space-x-2">
                         <Hash className="w-4 h-4 text-harbor-500" />
@@ -149,7 +151,7 @@ export default function WhatIsChipPage() {
 
                     <div className="flex items-center justify-between py-2 border-b border-harbor-100">
                       <span className="text-neutral-600 font-medium dark:text-neutral-300">
-                        创作者
+                        {t("certificate.creator")}
                       </span>
                       <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                         @seagull_artist
@@ -158,7 +160,7 @@ export default function WhatIsChipPage() {
 
                     <div className="flex items-center justify-between py-2 border-b border-harbor-100">
                       <span className="text-neutral-600 font-medium dark:text-neutral-300">
-                        认证时间
+                        {t("certificate.createTime")}
                       </span>
                       <span className="text-neutral-700 dark:text-neutral-300">
                         2024-01-15 14:30 UTC
@@ -167,24 +169,24 @@ export default function WhatIsChipPage() {
 
                     <div className="flex items-center justify-between py-2 border-b border-harbor-100">
                       <span className="text-neutral-600 font-medium dark:text-neutral-300">
-                        区块链状态
+                        {t("certificate.blockchainStatus")}
                       </span>
                       <div className="flex items-center space-x-2">
                         <Lock className="w-4 h-4 text-success-500" />
                         <span className="text-success-600 font-medium">
-                          不可篡改
+                          {t("certificate.currentBlockChainStatus")}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between py-2">
                       <span className="text-neutral-600 font-medium dark:text-neutral-300">
-                        验证状态
+                        {t("certificate.vetrifyStatus")}
                       </span>
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="w-4 h-4 text-success-500" />
                         <span className="text-success-600 font-semibold">
-                          数据已验证
+                          {t("certificate.currentVetrifyStatus")}
                         </span>
                       </div>
                     </div>
@@ -195,7 +197,7 @@ export default function WhatIsChipPage() {
                     className="w-full border-harbor-200 text-harbor-700 hover:bg-harbor-50 bg-transparent font-medium dark:text-neutral-300 dark:border-neutral-600 dark:hover:bg-neutral-700"
                   >
                     <Eye className="w-4 h-4 mr-2" />
-                    在区块链上查看
+                    {t("certificate.viewOnBlockchain")}
                   </Button>
                 </CardContent>
               </Card>
@@ -214,10 +216,10 @@ export default function WhatIsChipPage() {
           <div className="mb-20">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold text-neutral-900 mb-4 dark:text-neutral-100">
-                链上证明如何工作？
+                {t("howItWorks.title")}
               </h2>
               <p className="text-lg text-neutral-600 dark:text-neutral-300">
-                简单三步，为您的发布数据获得区块链认证
+                {t("howItWorks.description")}
               </p>
             </div>
 
@@ -229,10 +231,10 @@ export default function WhatIsChipPage() {
                     <span className="text-white font-bold text-2xl">1</span>
                   </div>
                   <h3 className="text-xl font-semibold text-neutral-900 mb-4 dark:text-neutral-100">
-                    数据提交
+                    {t("howItWorks.step1.title")}
                   </h3>
                   <p className="text-neutral-600 leading-relaxed dark:text-neutral-300">
-                    当您发布内容时，系统将自动为该数据生成独特的链上证明，记录发布时间和数据摘要。
+                    {t("howItWorks.step1.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -244,10 +246,10 @@ export default function WhatIsChipPage() {
                     <span className="text-white font-bold text-2xl">2</span>
                   </div>
                   <h3 className="text-xl font-semibold text-neutral-900 mb-4 dark:text-neutral-100">
-                    区块链记录
+                    {t("howItWorks.step2.title")}
                   </h3>
                   <p className="text-neutral-600 leading-relaxed dark:text-neutral-300">
-                    系统自动生成唯一的证明ID，并将数据摘要、发布者信息、时间戳等关键信息记录到区块链上。
+                    {t("howItWorks.step2.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -259,10 +261,10 @@ export default function WhatIsChipPage() {
                     <span className="text-white font-bold text-2xl">3</span>
                   </div>
                   <h3 className="text-xl font-semibold text-neutral-900 mb-4 dark:text-neutral-100">
-                    获得认证
+                    {t("howItWorks.step3.title")}
                   </h3>
                   <p className="text-neutral-600 leading-relaxed dark:text-neutral-300">
-                    您的数据获得链上证明，任何人都可以通过证明ID验证发布数据的完整性和真实性。
+                    {t("howItWorks.step3.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -273,10 +275,10 @@ export default function WhatIsChipPage() {
           <div className="mb-20">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold text-neutral-900 mb-4 dark:text-neutral-100">
-                链上证明的优势
+                {t("benefits.title")}
               </h2>
               <p className="text-lg text-neutral-600 dark:text-neutral-300">
-                为什么选择链上证明来认证您的发布数据？
+                {t("benefits.reasons")}
               </p>
             </div>
 
@@ -287,10 +289,10 @@ export default function WhatIsChipPage() {
                     <Shield className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-neutral-900 mb-2 dark:text-neutral-100">
-                    防伪保护
+                    {t("benefits.reason1.title")}
                   </h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                    区块链技术确保证明无法被伪造或篡改
+                    {t("benefits.reason1.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -301,10 +303,10 @@ export default function WhatIsChipPage() {
                     <Hash className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-neutral-900 mb-2 dark:text-neutral-100">
-                    唯一标识
+                    {t("benefits.reason2.title")}
                   </h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                    每个证明都有独特的ID，便于追踪和验证
+                    {t("benefits.reason2.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -315,10 +317,10 @@ export default function WhatIsChipPage() {
                     <Eye className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-neutral-900 mb-2 dark:text-neutral-100">
-                    公开透明
+                    {t("benefits.reason3.title")}
                   </h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                    所有人都可以查看和验证证明的真实性
+                    {t("benefits.reason3.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -329,10 +331,10 @@ export default function WhatIsChipPage() {
                     <Lock className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-neutral-900 mb-2 dark:text-neutral-100">
-                    永久保存
+                    {t("benefits.reason4.title")}
                   </h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                    证明信息永久存储，不会丢失或损坏
+                    {t("benefits.reason4.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -343,10 +345,10 @@ export default function WhatIsChipPage() {
           <div className="mb-20">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold text-neutral-900 mb-4 dark:text-neutral-100">
-                为什么选择 o-kitchen ？
+                {t("whyOkitchen.title")}
               </h2>
               <p className="text-lg text-neutral-600 dark:text-neutral-300">
-                我们致力于为创作者社区提供最佳的创作与社交体验
+                {t("whyOkitchen.description")}
               </p>
             </div>
 
@@ -360,18 +362,17 @@ export default function WhatIsChipPage() {
                     </div>
                     <div>
                       <CardTitle className="text-neutral-900 text-xl dark:text-neutral-100">
-                        社区驱动
+                        {t("whyOkitchen.reason1.title")}
                       </CardTitle>
                       <p className="text-neutral-600 dark:text-neutral-300">
-                        由创作者社区共同治理和发展
+                        {t("whyOkitchen.reason1.subtitle")}
                       </p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="relative z-10">
                   <p className="text-neutral-700 leading-relaxed dark:text-neutral-300 dark:text-neutral-300">
-                    o-kitchenn
-                    未来将是一个完全由创作者社区驱动的平台，所有重要决策都由社区成员共同参与制定，确保平台始终服务于创作者的真实需求。
+                    {t("whyOkitchen.reason1.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -385,15 +386,17 @@ export default function WhatIsChipPage() {
                     </div>
                     <div>
                       <CardTitle className="text-neutral-900 text-xl dark:text-neutral-100">
-                        开源透明
+                        {t("whyOkitchen.reason2.title")}
                       </CardTitle>
-                      <p className="text-neutral-600 dark:text-neutral-300">基于开源区块链协议构建</p>
+                      <p className="text-neutral-600 dark:text-neutral-300">
+                        {t("whyOkitchen.reason2.subtitle")}
+                      </p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="relative z-10">
                   <p className="text-neutral-700 leading-relaxed dark:text-neutral-300">
-                    我们的技术栈完全开源，任何人都可以审查代码、提出改进建议。透明的技术架构确保了平台的可信度和安全性。
+                    {t("whyOkitchen.reason2.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -407,17 +410,17 @@ export default function WhatIsChipPage() {
                     </div>
                     <div>
                       <CardTitle className="text-neutral-900 text-xl dark:text-neutral-100">
-                        非营利性质
+                        {t("whyOkitchen.reason3.title")}
                       </CardTitle>
                       <p className="text-neutral-600 dark:text-neutral-300">
-                        专注于服务创作者，不以盈利为目的
+                        {t("whyOkitchen.reason3.subtitle")}
                       </p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="relative z-10">
                   <p className="text-neutral-700 leading-relaxed dark:text-neutral-300">
-                    作为非营利平台，我们的唯一目标是为创作者提供更好的服务。所有收入都将用于平台的维护和发展，绝不会为了商业利益而牺牲用户体验。
+                    {t("whyOkitchen.reason3.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -431,16 +434,17 @@ export default function WhatIsChipPage() {
                     </div>
                     <div>
                       <CardTitle className="text-neutral-900 text-xl dark:text-neutral-100">
-                        技术先进
+                        {t("whyOkitchen.reason4.title")}
                       </CardTitle>
-                      <p className="text-neutral-600 dark:text-neutral-300">采用最新的Web3技术栈</p>
+                      <p className="text-neutral-600 dark:text-neutral-300">
+                        {t("whyOkitchen.reason4.subtitle")}
+                      </p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="relative z-10">
                   <p className="text-neutral-700 leading-relaxed dark:text-neutral-300">
-                    基于 Lens Protocol、Grove Storage
-                    等先进的Web3技术构建，确保平台具有最佳的性能、安全性和用户体验。
+                    {t("whyOkitchen.reason4.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -459,13 +463,13 @@ export default function WhatIsChipPage() {
 
             <div className="relative z-10">
               <h3 className="text-4xl sm:text-5xl font-bold mb-6">
-                开始使用链上证明
+                {t("callToAction.title")}
               </h3>
               <p className="text-xl sm:text-2xl mb-4 opacity-90">
-                认证您的发布数据，加入去中心化创作社区
+                {t("callToAction.subtitle")}
               </p>
               <p className="text-lg mb-12 opacity-80">
-                让每一份创作都能在这片海域自由航行 🚢✨
+                {t("callToAction.description")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -476,7 +480,7 @@ export default function WhatIsChipPage() {
                     className="bg-white text-harbor-600 hover:bg-harbor-50 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
                   >
                     <Link href="/feed" className="flex items-center space-x-2">
-                      <span>立即加入</span>
+                      <span>{t("callToAction.button1")}</span>
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                     </Link>
                   </Button>
@@ -489,7 +493,7 @@ export default function WhatIsChipPage() {
                         onClick={show}
                       >
                         <span className="flex items-center space-x-2">
-                          <span>连接加入</span>
+                          <span>{t("callToAction.button2")}</span>
                           {/*<div className="text-xl">🍟</div>*/}
                           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                         </span>
@@ -505,7 +509,7 @@ export default function WhatIsChipPage() {
                   className="border-2 border-white text-white hover:bg-white hover:text-harbor-600 bg-transparent px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
                 >
                   <Link href="/feed" className="flex items-center space-x-2">
-                    <span>浏览社区</span>
+                    <span>{t("callToAction.button3")}</span>
                     {/*<div className="text-xl">🌊</div>*/}
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>

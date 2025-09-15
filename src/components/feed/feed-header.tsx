@@ -6,15 +6,17 @@ import { useState } from "react"
 import { useDisabled } from "@/utils/disabled"
 import { FilterDialog } from "@/components/dialogs/filter-dialog"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl";
+
 
 export function FeedHeader() {
   //const [opened, { toggle }] = useDisclosure(false)
   const [activeTab, setActiveTab] = useState("latest")
-
+  const feedHeaderT = useTranslations("feedHeader");
   const mainTabs = [
-    { value: "follow", label: "关注", disabled: true },
-    { value: "home", label: "发现", disabled: true },
-    { value: "latest", label: "最新", disabled: false },
+    { value: "follow", label: feedHeaderT("follow"), disabled: true },
+    { value: "home", label: feedHeaderT("home"),disabled: true },
+    { value: "latest", label: feedHeaderT("latest"), disabled: false },
   ]
 
   const router = useRouter()

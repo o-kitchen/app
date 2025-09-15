@@ -21,6 +21,11 @@
     "anonymous": "Anonymous",
     "fanworkLover": "Fanwork Lover"
   },
+  "feedHeader":{
+    "follow": "subscribe",
+    "home": "discover",
+    "latest": "latest"
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -235,5 +240,104 @@
     },
     "copyright": "© 2025 o-kitchen. Built with ❤️ for the decentralized fanart networks.",
     "poweredBy": "Powered by"
+  },
+  "what-is-chip": {
+    "title": "What is ",
+    "subtitle": "Onchain Proof?",
+    "description": "On-chain proof is an original work certification system based on blockchain technology, which provides an unalterable proof of ownership for each original content.",
+    "whatIsChip": {
+      "descriptionTitle": "What is Onchain Proof?",
+      "descriptionParagraph1": "On-chain proof is a blockchain-based data certification system adopted by the o-kitchen platform. When a user publishes content, the system automatically generates an on-chain proof for that data.",
+      "descriptionParagraph2": "Each on-chain proof has a unique proof ID. This ID, along with key data such as the publication timestamp and a data summary, is permanently recorded on the blockchain, forming an immutable digital certificate.",
+      "descriptionParagraph3": "This ensures the integrity and traceability of the published data and provides a transparent and trustworthy data verification mechanism for the entire community."
+    },
+    "start":{
+      "button1":"Connect & Publish",
+      "button2":"Explore"
+    },
+    "core": {
+      "title": "Core Concept",
+      "description": "“Let every publication be traceable, and every piece of data be protected”—On-chain proof is dedicated to building a trustworthy data certification system in a decentralized world."
+    },
+    "onchainProof":"Onchain Proof",
+    "certificate": {
+      "verified": "Verified",
+      "certificateId": "Certificate ID",
+      "creator": "Creator",
+      "createTime": "Creation Time",
+      "blockchainStatus": "Blockchain Status",
+      "currentBlockChainStatus": "Immutable",
+      "vetrifyStatus": "Verification Status",
+      "currentVetrifyStatus": "Data Verified",
+      "viewOnBlockchain": "View on Blockchain"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "description": "Three simple steps to get blockchain certification for your published data.",
+      "step1": {
+        "title": "Data Submission",
+        "description": "When you publish content, the system automatically generates a unique on-chain proof for that data, recording the publication time and a data summary."
+      },
+      "step2": {
+        "title": "Blockchain Record",
+        "description": "The system automatically generates a unique proof ID and records key information, such as the data summary, publisher information, and timestamp, on the blockchain."
+      },
+      "step3": {
+        "title": "Get Certified",
+        "description": "Your data is certified on-chain, and anyone can use the proof ID to verify the integrity and authenticity of the published data."
+      }
+    },
+    "benefits": {
+      "title": "Advantages of On-chain Proof",
+      "reasons": "Why choose on-chain proof to certify your published data?",
+      "reason1": {
+        "title": "Anti-counterfeiting Protection",
+        "description": "Blockchain technology ensures that the proof cannot be forged or tampered with."
+      },
+      "reason2": {
+        "title": "Unique Identification",
+        "description": "Each proof has a unique ID, making it easy to track and verify."
+      },
+      "reason3": {
+        "title": "Open and Transparent",
+        "description": "Anyone can view and verify the authenticity of the proof."
+      },
+      "reason4": {
+        "title": "Permanent Storage",
+        "description": "The proof information is permanently stored and will not be lost or corrupted."
+      }
+    },
+    "whyOkitchen": {
+      "title": "Why o-kitchen?",
+      "description": "We are committed to providing the best creation and social experience for the creator community.",
+      "reason1": {
+        "title": "Community-Driven",
+        "subtitle": "Governed and developed by the creator community.",
+        "description": "o-kitchen will be a platform completely driven by the creator community in the future. All important decisions will be made with the participation of community members, ensuring that the platform always serves the real needs of creators."
+      },
+      "reason2": {
+        "title": "Open Source & Transparent",
+        "subtitle": "Built on an open-source blockchain protocol.",
+        "description": "Our technology stack is completely open-source, and anyone can review the code and suggest improvements. The transparent technical architecture ensures the trustworthiness and security of the platform."
+      },
+      "reason3": {
+        "title": "Non-Profit Nature",
+        "subtitle": "Focuses on serving creators and is not for profit.",
+        "description": "As a non-profit platform, our only goal is to provide better services for creators. All income will be used for platform maintenance and development, and user experience will never be sacrificed for commercial interests."
+      },
+      "reason4": {
+        "title": "Technically Advanced",
+        "subtitle": "Adopts the latest Web3 technology stack.",
+        "description": "Built on advanced Web3 technologies like Lens Protocol and Grove Storage, it ensures the platform has optimal performance, security, and user experience."
+      }
+    },
+    "callToAction": {
+      "title": "Start Your Journey with o-kitchen",
+      "subtitle": "Certify your publishing data and join the decentralized creation community",
+      "description": "Let every creation sail freely in this sea 🚢✨",
+      "button1": "Join Now",
+      "button2": "Connect & Join",
+      "button3": "Explore Community"
+    }
   }
 }
