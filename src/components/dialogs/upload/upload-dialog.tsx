@@ -2,41 +2,41 @@
 
 import { Modal, Group, Stack, useMantineTheme, Text, Box, ActionIcon } from "@mantine/core"
 import { useState } from "react"
-import { X, Plus } from "lucide-react"
-import { CookButton } from "./cook-buttons"
-import { ArtDialog } from "../art/art-dialog"
+import { X } from "lucide-react"
+import { UploadButton } from "./upload-buttons"
+import { ArtDialog } from "../cook/art-dialog"
 
-interface CookDialogProps {
+interface UploadDialogProps {
   opened: boolean
   onClose: () => void
   onButtonClick: (action: string) => void
   selectedAction: string | null
 }
 
-export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: CookDialogProps) {
+export function UploadDialog({ opened, onClose, onButtonClick, selectedAction }: UploadDialogProps) {
   const theme = useMantineTheme()
   const [artDialogOpened, setArtDialogOpened] = useState(false)
 
-  const cookOptions = [
+  const uploadOptions = [
     {
       label: "Cook", 
       description: "Fan Work",
       icon: "🍪",
-      color: "#06b6d4", // Cyan
+      color: "#f97316", // Orange
       disabled: false,
     },
     {
       label: "Moment",
       description: "Capture memories",
       icon: "🩵",
-      color: "#8b5cf6", // Purple
+      color: "#f97316", // Orange
       disabled: true,
     },
     {
       label: "Event",
       description: "Comic Con",
       icon: "🎫",
-      color: "#8b5cf6", // Purple
+      color: "#f97316", // Orange
       disabled: true,
     },
   ]
@@ -66,29 +66,16 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
       >
         <Box
           style={{
-            padding: theme.spacing.xl,
-            background: theme.colors.dark[7],
+            padding: theme.spacing.xs,
             borderRadius: `${theme.radius.xl}px ${theme.radius.xl}px 0 0`,
             position: "relative",
           }}
         >
           {/* Header Actions */}
-          <Group justify="space-between" mb="xl">
-            <ActionIcon
-              size="lg"
-              variant="filled"
-              color="dark.6"
-              radius="xl"
-              style={{
-                background: theme.colors.dark[6],
-                border: `1px solid ${theme.colors.dark[5]}`,
-              }}
-            >
-              <Plus size={16} color={theme.colors.gray[3]} />
-            </ActionIcon>
+          <Group justify="end" mb="xs">
             
             <ActionIcon
-              size="lg"
+              size="md"
               variant="filled"
               color="dark.6"
               radius="xl"
@@ -103,9 +90,9 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
           </Group>
 
           {/* Title Section */}
-          <Stack gap="sm" align="center" mb="lg">
+          <Stack gap="sm" align="center" mb="xs">
             <Text
-              size="2rem"
+              size="1.5rem"
               fw={700}
               c="white"
               style={{
@@ -116,7 +103,7 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
               Upload
             </Text>
             <Text
-              size="lg"
+              size="md"
               c="gray.4"
               style={{
                 fontFamily: theme.fontFamily,
@@ -131,14 +118,14 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
         {/* Content Area */}
         <Box
           style={{
-            padding: theme.spacing.xl,
+            padding: theme.spacing.md,
             background: theme.colors.dark[8],
             borderRadius: `0 0 ${theme.radius.xl}px ${theme.radius.xl}px`,
           }}
         >
-          <Group justify="center" gap="md" wrap="nowrap">
-            {cookOptions.map((option, index) => (
-              <CookButton
+          <Group justify="center" gap="lg" wrap="nowrap">
+            {uploadOptions.map((option, index) => (
+              <UploadButton
                 key={option.label}
                 label={option.label}
                 description={option.description}

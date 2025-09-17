@@ -1,7 +1,7 @@
 "use client"
 
 import { Modal } from "@mantine/core"
-import { ArtCreateForm } from "@/components/dialogs/art/art-create-form"
+import { ArtCreateForm } from "@/components/dialogs/cook/art-create-form"
 
 interface ArtDialogProps {
   opened: boolean
@@ -28,7 +28,7 @@ export function ArtDialog({ opened, onClose, onComplete }: ArtDialogProps) {
           background: "transparent",
           borderRadius: "16px",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-          maxHeight: "100vh",
+          minHeight: "100vh",
         },
       }}
     >

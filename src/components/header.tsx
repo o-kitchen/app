@@ -25,7 +25,7 @@ import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
 import { useRouter as useIntlRouter } from "@/i18n/navigation";
 import { useReconnectWallet } from "@/hooks/auth/use-reconnect-wallet";
-import { CookDialog } from "./dialogs/cook/cook-dialog";
+import { UploadDialog } from "./dialogs/upload/upload-dialog";
 
 export default function Header() {
   const t = useTranslations("header");
@@ -38,7 +38,7 @@ export default function Header() {
   const { setProfileSelectModalOpen } = useProfileSelectStore();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cookDialogOpened, setCookDialogOpened] = useState(false);
+  const [uploadDialogOpened, setUploadDialogOpened] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const locale = useLocale();
@@ -81,16 +81,16 @@ export default function Header() {
     setSessionClient(null);
   };
 
-  const handleCookButtonClick = (action: string) => {
+  const handleUploadButtonClick = (action: string) => {
     setSelectedAction(action);
     if (action === "Cook Work") {
-      setCookDialogOpened(false);
+      setUploadDialogOpened(false);
       router.push("/create");
     }
   };
 
-  const handleCookDialogClose = () => {
-    setCookDialogOpened(false);
+  const handleUploadDialogClose = () => {
+    setUploadDialogOpened(false);
     setSelectedAction(null);
   };
 
@@ -199,7 +199,7 @@ export default function Header() {
                 variant="default"
                 size="sm"
                 className="chip-button text-white md:h-10 md:w-10 md:p-0 rounded-full"
-                onClick={() => setCookDialogOpened(true)}
+                onClick={() => setUploadDialogOpened(true)}
               >
                 <span className="md:hidden">{t("cook")}</span>
                 <Plus className="h-5 w-5 md:block hidden font-bold" />
@@ -431,10 +431,10 @@ export default function Header() {
         )}
       </div>
       
-      <CookDialog
-        opened={cookDialogOpened}
-        onClose={handleCookDialogClose}
-        onButtonClick={handleCookButtonClick}
+      <UploadDialog
+        opened={uploadDialogOpened}
+        onClose={handleUploadDialogClose}
+        onButtonClick={handleUploadButtonClick}
         selectedAction={selectedAction}
       />
     </header>

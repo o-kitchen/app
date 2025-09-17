@@ -2,7 +2,7 @@
 
 import { Box, Text, useMantineTheme, Stack } from "@mantine/core"
 
-interface CookButtonProps {
+interface UploadButtonProps {
   label: string
   description: string
   icon: string
@@ -11,7 +11,7 @@ interface CookButtonProps {
   disabled?: boolean
 }
 
-export function CookButton({ label, description, icon, color, onClick, disabled = false }: CookButtonProps) {
+export function UploadButton({ label, description, icon, color, onClick, disabled = false }: UploadButtonProps) {
   const theme = useMantineTheme()
 
   return (

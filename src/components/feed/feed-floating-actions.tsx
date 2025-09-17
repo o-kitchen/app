@@ -7,7 +7,7 @@ import { useFeedContext } from "@/contexts/feed-context";
 import { FeedViewToggle } from "./feed-view-toggle";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { CookDialog } from "../dialogs/cook/cook-dialog";
+import { UploadDialog } from "../dialogs/upload/upload-dialog";
 
 interface FeedFloatingActionsProps {
   onRefresh: () => void;
@@ -23,23 +23,23 @@ export function FeedFloatingActions({
   const { width } = useViewportSize();
   const isMobile = width < 768; // md breakpoint
   const router = useRouter();
-  const [cookDialogOpened, setCookDialogOpened] = useState(false);
+  const [uploadDialogOpened, setUploadDialogOpened] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
 
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleCookButtonClick = (action: string) => {
+  const handleUploadButtonClick = (action: string) => {
     setSelectedAction(action);
     if (action === "Cook Work") {
-      setCookDialogOpened(false);
+      setUploadDialogOpened(false);
       router.push("/create");
     }
   };
 
-  const handleCookDialogClose = () => {
-    setCookDialogOpened(false);
+  const handleUploadDialogClose = () => {
+    setUploadDialogOpened(false);
     setSelectedAction(null);
   };
 
@@ -78,7 +78,7 @@ export function FeedFloatingActions({
                     backgroundColor: "#ff6b35",
                     boxShadow: "0 0 10px 0 rgba(255, 107, 53, 0.3)",
                   }}
-                  onClick={() => setCookDialogOpened(true)}
+                  onClick={() => setUploadDialogOpened(true)}
                   aria-label="发布作品"
                 >
                   <Plus 
@@ -151,10 +151,10 @@ export function FeedFloatingActions({
         )}
       </Transition>
       
-      <CookDialog
-        opened={cookDialogOpened}
-        onClose={handleCookDialogClose}
-        onButtonClick={handleCookButtonClick}
+      <UploadDialog
+        opened={uploadDialogOpened}
+        onClose={handleUploadDialogClose}
+        onButtonClick={handleUploadButtonClick}
         selectedAction={selectedAction}
       />
     </>
