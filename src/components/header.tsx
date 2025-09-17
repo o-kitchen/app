@@ -68,7 +68,7 @@ export default function Header() {
   }, [isConnected, address, currentProfile, setProfileSelectModalOpen]);
 
   const navItems = [
-    { href: "/feed", label: navT("feed"), icon: Home },
+    { href: "/", label: navT("feed"), icon: Home },
     { href: '/discover', label: navT('discover'), icon: Compass },
     { href: "/what-is-chip", label: navT("onchainProof"), icon: ScrollText },
     { href: "/about", label: navT("home"), icon: Info },
