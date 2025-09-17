@@ -71,7 +71,7 @@ export default function Header() {
     { href: "/feed", label: navT("feed"), icon: Home },
     { href: '/discover', label: navT('discover'), icon: Compass },
     { href: "/what-is-chip", label: navT("onchainProof"), icon: ScrollText },
-    { href: "/", label: navT("home"), icon: Info },
+    { href: "/about", label: navT("home"), icon: Info },
   ];
 
   const handleDisconnect = async () => {

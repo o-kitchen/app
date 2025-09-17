@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AnyPost } from "@lens-protocol/client";
+import { AnyPost, evmAddress } from "@lens-protocol/client";
 import { post as createPost } from "@lens-protocol/client/actions";
 import { handleOperationWith } from "@lens-protocol/client/viem";
 import { textOnly } from "@lens-protocol/metadata";
@@ -100,6 +100,7 @@ export function CommentSection({
         commentOn: {
           post: post.id,
         },
+        feed: evmAddress("0xd74a3C23DB0BFEA48007BeA447a5D20C422242fb")//o-kitchen works-feed for uploading fanworks on o-kitchen
       })
         .andThen(handleOperationWith(walletClient))
         .andThen(sessionClient.waitForTransaction);

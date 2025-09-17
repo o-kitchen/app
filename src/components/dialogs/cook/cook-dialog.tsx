@@ -19,6 +19,13 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
 
   const cookOptions = [
     {
+      label: "Cook", 
+      description: "Fan Work",
+      icon: "🍪",
+      color: "#06b6d4", // Cyan
+      disabled: false,
+    },
+    {
       label: "Moment",
       description: "Capture memories",
       icon: "🩵",
@@ -26,15 +33,8 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
       disabled: true,
     },
     {
-      label: "Art", 
-      description: "Create & share",
-      icon: "🎨",
-      color: "#06b6d4", // Cyan
-      disabled: false,
-    },
-    {
       label: "Event",
-      description: "Virtual & IRL",
+      description: "Comic Con",
       icon: "🎫",
       color: "#8b5cf6", // Purple
       disabled: true,
@@ -113,7 +113,7 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
                 letterSpacing: "-0.025em",
               }}
             >
-              Create
+              Upload
             </Text>
             <Text
               size="lg"
@@ -123,7 +123,7 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
                 fontWeight: 400,
               }}
             >
-              What are we creating today?
+              What are we sharing today?
             </Text>
           </Stack>
         </Box>
@@ -145,7 +145,7 @@ export function CookDialog({ opened, onClose, onButtonClick, selectedAction }: C
                 icon={option.icon}
                 color={option.color}
                 onClick={() => {
-                  if (option.label === "Art") {
+                  if (option.label === "Cook") {
                     setArtDialogOpened(true)
                   } else {
                     onButtonClick(option.label)

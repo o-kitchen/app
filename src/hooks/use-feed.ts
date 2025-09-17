@@ -4,16 +4,21 @@ import { fetchPosts } from "@lens-protocol/client/actions";
 import { useSharedPostActions } from "@/contexts/post-actions-context";
 import { useLensAuthStore } from "@/stores/auth-store";
 import { useFeedContext } from "@/contexts/feed-context";
+import { evmAddress } from "@lens-protocol/client";
+import { env } from "@/lib/env";
 
 // Helper function to filter out comments and replies
 export function isValidArticlePost(post: AnyPost): boolean {
   return (
     post.__typename === "Post" &&
-    // Check if it's not a comment or reply by ensuring it doesn't have root reference
-    // Main posts don't have a root (they are not comments on other posts)
-    !post.root &&
-    // Additional check: ensure it's a main post (not a comment)
-    post.metadata?.__typename !== undefined
+    // Check if it's not a comment or reply by ensuring it doesn't have root reference. Main posts don't have a root (they are not comments on other posts)
+    //!post.root &&
+    // 检查是否是评论：评论会有 commentOn 字段
+    !post.commentOn &&
+    // 确保是我方帖子
+    post.app?.address === evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)
+    // 确保有元数据
+    //post.metadata?.__typename !== undefined
   );
 }
 
@@ -47,8 +52,7 @@ export function useFeed(options: useFeedOptions = {}) {
   const [refreshing, setRefreshing] = useState(false);
   const [newPostsAvailable, setNewPostsAvailable] = useState(false);
   const [lastRefreshTime, setLastRefreshTime] = useState<Date>(new Date());
-  const [currentCursor, setCurrentCursor] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
+  const [paginationInfo, setPaginationInfo] = useState<{ next?: string | null } | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
   
   // Refs for polling
@@ -61,7 +65,7 @@ export function useFeed(options: useFeedOptions = {}) {
   // Helper functions
   const getFilter = useCallback(() => {
     if (type === "global") {
-      return { feeds: [{ globalFeed: true }] };
+      return { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)], };
     } else if (type === "profile" && profileAddress) {
       return { authors: [profileAddress] };
     } else if (type === "custom" && customFilter) {
@@ -73,7 +77,7 @@ export function useFeed(options: useFeedOptions = {}) {
 
 
   // Feed operations
-  const loadPostsFromLens = useCallback(async (isRefresh = false, cursor: string | null = null) => {
+  const loadPostsFromLens = useCallback(async (isRefresh = false, cursor?: string) => {
     // Client should always be available for public posts
     if (!client) return;
     
@@ -83,10 +87,14 @@ export function useFeed(options: useFeedOptions = {}) {
       else setLoading(true);
       setError(null);
       
+      const filter = type === "global" 
+        ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
+        : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+        
       const result = await fetchPosts(sessionClient || client, {
-        filter: getFilter(),
+        filter,
         pageSize: PageSize.Fifty,
-        cursor: cursor || undefined,
+        cursor,
       });
       
       if (result.isErr()) {
@@ -95,15 +103,9 @@ export function useFeed(options: useFeedOptions = {}) {
       }
       
       const { items, pageInfo } = result.value;
-      if (items.length === 0 && !cursor) {
-        setPosts([]);
-        setHasMore(false);
-        return;
-      }
       
       // Filter out comments and replies, keep only main posts
       const filteredPosts = items
-        .filter(item => item.__typename === 'Post')
         .filter(isValidArticlePost) as Post[];
 
       // Initialize post states for actions
@@ -113,19 +115,20 @@ export function useFeed(options: useFeedOptions = {}) {
       
       if (filteredPosts.length > 0) {
         lastPostIdRef.current = filteredPosts[0].id;
-      } else if (cursor) {
-        setHasMore(false);
-        return;
       }
       
-      setCurrentCursor(pageInfo.next);
-      setHasMore(!!pageInfo.next);
+      setPaginationInfo(pageInfo);
       
       if (isRefresh) {
         setPosts(filteredPosts);
         setLastRefreshTime(new Date());
       } else if (cursor) {
-        setPosts(prev => [...prev, ...filteredPosts]);
+        // 去重逻辑：过滤掉已存在的帖子
+        setPosts(prev => {
+          const existingIds = new Set(prev.map(post => post.id));
+          const newPosts = filteredPosts.filter(post => !existingIds.has(post.id));
+          return [...prev, ...newPosts];
+        });
       } else {
         setPosts(filteredPosts);
         setLastRefreshTime(new Date());
@@ -139,15 +142,19 @@ export function useFeed(options: useFeedOptions = {}) {
       setRefreshing(false);
       setLoadingMore(false);
     }
-  }, [client, sessionClient, getFilter, initPostState]);
+  }, [client, sessionClient, getFilter, initPostState, type]);
 
   const checkForNewPosts = useCallback(async () => {
     // Client should always be available for public posts
     if (!client) return;
 
     try {
+      const filter = type === "global" 
+        ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
+        : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+        
       const result = await fetchPosts(sessionClient || client, {
-        filter: getFilter(),
+        filter,
       });
       if (result.isErr()) return;
       
@@ -160,7 +167,7 @@ export function useFeed(options: useFeedOptions = {}) {
         setNewPostsAvailable(true);
       }
     } catch {}
-  }, [client, sessionClient, getFilter]);
+  }, [client, sessionClient, getFilter, type]);
 
   const handleRefresh = useCallback((e?: React.MouseEvent) => {
     e?.preventDefault();
@@ -168,10 +175,10 @@ export function useFeed(options: useFeedOptions = {}) {
   }, [loadPostsFromLens]);
 
   const handleLoadMore = useCallback(() => {
-    if (currentCursor && hasMore && !loadingMore) {
-      loadPostsFromLens(false, currentCursor);
+    if (paginationInfo?.next && !loadingMore) {
+      loadPostsFromLens(false, paginationInfo.next);
     }
-  }, [currentCursor, hasMore, loadingMore, loadPostsFromLens]);
+  }, [paginationInfo?.next, loadingMore, loadPostsFromLens]);
 
   const handleLoadNewPosts = useCallback((e?: React.MouseEvent) => {
     e?.preventDefault();
@@ -192,16 +199,19 @@ export function useFeed(options: useFeedOptions = {}) {
     setPosts([]);
     setLoading(true);
     setError(null);
-    setCurrentCursor(null);
-    setHasMore(true);
+    setPaginationInfo(null);
     
     const initializeAndLoadPosts = async () => {
       try {
         setLoading(true);
         setError(null);
         
+        const filter = type === "global" 
+          ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
+          : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+          
         const result = await fetchPosts(sessionClient || client, {
-          filter: getFilter(),
+          filter,
           pageSize: PageSize.Fifty,
         });
         
@@ -211,15 +221,9 @@ export function useFeed(options: useFeedOptions = {}) {
         }
         
         const { items, pageInfo } = result.value;
-        if (items.length === 0) {
-          setPosts([]);
-          setHasMore(false);
-          return;
-        }
         
         // Filter out comments and replies, keep only main posts
-      const filteredPosts = items
-        .filter(item => item.__typename === 'Post')
+        const filteredPosts = items
         .filter(isValidArticlePost) as Post[];
 
         // Initialize post states for actions
@@ -231,8 +235,7 @@ export function useFeed(options: useFeedOptions = {}) {
           lastPostIdRef.current = filteredPosts[0].id;
         }
         
-        setCurrentCursor(pageInfo.next);
-        setHasMore(!!pageInfo.next);
+        setPaginationInfo(pageInfo);
         setPosts(filteredPosts);
         setLastRefreshTime(new Date());
         setNewPostsAvailable(false);
@@ -250,16 +253,20 @@ export function useFeed(options: useFeedOptions = {}) {
       if (!client) return;
 
       try {
+        const filter = type === "global" 
+          ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
+          : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+          
         const result = await fetchPosts(sessionClient || client, {
-          filter: getFilter(),
+          filter,
         });
         if (result.isErr()) return;
         
         const { items } = result.value;
         // Filter out comments and replies, keep only main posts
-      const filteredPosts = items
-        .filter(item => item.__typename === 'Post')
-        .filter(isValidArticlePost) as Post[];
+        const filteredPosts = items
+          .filter(item => item.__typename === 'Post')
+          .filter(isValidArticlePost) as Post[];
         if (filteredPosts.length > 0 && filteredPosts[0].id !== lastPostIdRef.current) {
           setNewPostsAvailable(true);
         }
@@ -282,6 +289,9 @@ export function useFeed(options: useFeedOptions = {}) {
       window.removeEventListener('focus', handleFocus);
     };
   }, [client, sessionClient, isAuthReady, type, profileAddress, customFilter, viewMode]);
+
+  // 计算是否还有更多数据
+  const hasMore = !!(paginationInfo?.next && paginationInfo.next !== null);
 
   // Feed interface
   return {

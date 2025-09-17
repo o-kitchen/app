@@ -37,16 +37,10 @@ export function FeedHeader() {
         }}
       >
         <Group justify="space-between" h="100%" align="center">
-          {/* Left: Filter Icon */}
-          <FilterDialog
-            trigger={
-              <ActionIcon variant="transparent" size="lg" className="text-gray-800 dark:text-gray-200">
-                <Filter size={20} />
-              </ActionIcon>
-            }
-            onFiltersChange={(filters) => {
-            }}
-          />
+          {/* Left: Search Icon */}
+          <ActionIcon variant="transparent" size="lg" className="text-gray-800 dark:text-gray-200">
+            <Search size={20} onClick={() => router.push("/discover")} />
+          </ActionIcon>
 
           {/* Center: Main Navigation Tabs */}
           <Tabs value={activeTab} onChange={(value) => setActiveTab(value || "latest")} variant="unstyled">
@@ -80,11 +74,17 @@ export function FeedHeader() {
               ))}
             </Tabs.List>
           </Tabs>
-
-          {/* Right: Search Icon */}
-          <ActionIcon variant="transparent" size="lg" className="text-gray-800 dark:text-gray-200">
-            <Search size={20} onClick={() => router.push("/discover")} />
-          </ActionIcon>
+          {/* Right: Filter Icon */}
+          <FilterDialog
+            trigger={
+              <ActionIcon variant="transparent" size="lg" className="text-gray-800 dark:text-gray-200">
+                <Filter size={20} />
+              </ActionIcon>
+            }
+            onFiltersChange={(filters) => {
+            }}
+          />
+          
         </Group>
       </Box>
 

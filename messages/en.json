@@ -22,9 +22,9 @@
     "fanworkLover": "Fanwork Lover"
   },
   "feedHeader":{
-    "follow": "subscribe",
-    "home": "discover",
-    "latest": "latest"
+    "follow": "Follow",
+    "home": "Discover",
+    "latest": "Latest"
   },
   "common": {
     "loading": "Loading...",
