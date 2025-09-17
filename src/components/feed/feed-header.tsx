@@ -5,13 +5,15 @@ import { Search, Filter } from "lucide-react"
 import { useState } from "react"
 import { useDisabled } from "@/utils/disabled"
 import { FilterDialog } from "@/components/dialogs/filter-dialog"
-import { useRouter } from "next/navigation"
+import { SearchDialog } from "@/components/dialogs/search/search-dialog"
+//import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl";
 
 
 export function FeedHeader() {
   //const [opened, { toggle }] = useDisclosure(false)
   const [activeTab, setActiveTab] = useState("latest")
+  const [searchOpened, setSearchOpened] = useState(false)
   const feedHeaderT = useTranslations("feedHeader");
   const mainTabs = [
     { value: "follow", label: feedHeaderT("follow"), disabled: true },
@@ -19,7 +21,7 @@ export function FeedHeader() {
     { value: "latest", label: feedHeaderT("latest"), disabled: false },
   ]
 
-  const router = useRouter()
+  //const router = useRouter()
 
   return (
     <Box>
@@ -43,7 +45,7 @@ export function FeedHeader() {
             variant="transparent" 
             size="lg"
             className="text-gray-600 hover:text-orange-600 cursor-pointer dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex-shrink-0"
-            onClick={() => router.push("/discover")}
+            onClick={() => setSearchOpened(true)}
           >
             <Search size={20} />
           </ActionIcon>
@@ -101,6 +103,11 @@ export function FeedHeader() {
         </Group>
       </Box>
 
+      {/* Search Dialog */}
+      <SearchDialog 
+        opened={searchOpened} 
+        onClose={() => setSearchOpened(false)} 
+      />
     </Box>
   )
 }

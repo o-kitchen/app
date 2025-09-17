@@ -16,7 +16,7 @@ interface FeedProviderProps {
   initialViewMode?: FeedViewMode;
 }
 
-export function FeedProvider({ children, initialViewMode = "masonry" }: FeedProviderProps) {
+export function FeedProvider({ children, initialViewMode = "list" }: FeedProviderProps) {
   const [viewMode, setViewMode] = useState<FeedViewMode>(initialViewMode);
 
   return (
