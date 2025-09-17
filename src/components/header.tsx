@@ -115,7 +115,7 @@ export default function Header() {
           
           {/* Logo */}
           <Link href="/" className="hidden md:flex items-center space-x-2">
-            <img src="/icon0.svg" alt="o-kitchen" className="h-8 w-8" />
+            <img src="/icon0.svg" alt="o-kitchen" className="h-10 w-10" />
           </Link>
           
           {/* Desktop Navigation*/}
@@ -152,7 +152,7 @@ export default function Header() {
                   )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuContent align="center" className="w-40">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
                   <Sun className="mr-2 h-4 w-4" />
                   <span>Light</span>
@@ -179,7 +179,7 @@ export default function Header() {
                   <Languages className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-32" >
+              <DropdownMenuContent align="start" className="w-32" >
                 <DropdownMenuItem 
                   onClick={() => handleLanguageChange("zh")}
                 >
@@ -211,9 +211,9 @@ export default function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="relative h-8 w-8 md:h-10 md:w-10 rounded-full"
+                    className="relative h-8 w-8 md:h-9 md:w-9 rounded-full"
                   >
-                    <Avatar className="h-8 w-8 md:h-10 md:w-10 border-2 border-gray-200">
+                    <Avatar className="h-8 w-8 md:h-9 md:w-9 border-2 border-gray-200">
                       <AvatarImage
                         src={currentProfile?.metadata?.picture || "/gull.jpg"}
                       />
@@ -227,7 +227,7 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   className="w-56 border-gray-200"
-                  align="end"
+                  align="start"
                   forceMount
                 >
                   <div className="flex items-center justify-start gap-2 p-2">
@@ -293,7 +293,7 @@ export default function Header() {
                     <UserAvatar />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48" align="end" forceMount>
+                <DropdownMenuContent className="w-48" align="start" forceMount>
                   <DropdownMenuItem
                     onClick={() => {
                       setProfileSelectModalOpen(true);

@@ -180,6 +180,19 @@ export function useFeed(options: useFeedOptions = {}) {
     }
   }, [paginationInfo?.next, loadingMore, loadPostsFromLens]);
 
+  // 乐观加载
+  useEffect(() => {
+    const shouldAutoLoad = posts.length < 20 && 
+                          paginationInfo?.next && 
+                          !loadingMore && 
+                          !loading && 
+                          !refreshing;
+    
+    if (shouldAutoLoad) {
+      handleLoadMore();
+    }
+  }, [posts.length, paginationInfo?.next, loadingMore, loading, refreshing, handleLoadMore]);
+
   const handleLoadNewPosts = useCallback((e?: React.MouseEvent) => {
     e?.preventDefault();
     setNewPostsAvailable(false);
@@ -290,7 +303,6 @@ export function useFeed(options: useFeedOptions = {}) {
     };
   }, [client, sessionClient, isAuthReady, type, profileAddress, customFilter, viewMode]);
 
-  // 计算是否还有更多数据
   const hasMore = !!(paginationInfo?.next && paginationInfo.next !== null);
 
   // Feed interface

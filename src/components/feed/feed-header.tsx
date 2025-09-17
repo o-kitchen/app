@@ -25,8 +25,8 @@ export function FeedHeader() {
     <Box>
       {/* Main Header */}
       <Box
-        h={60}
-        px="md"
+        h={"auto"}
+        px={{ base: "sm", sm: "md" }}
         style={{
           //borderBottom: "1px solid #f0f0f0",
           backgroundColor: "transparent",
@@ -34,17 +34,23 @@ export function FeedHeader() {
           //top: 0,
           //zIndex: 100,
           borderRadius: "10px",
+          overflow: "hidden",
         }}
       >
-        <Group justify="space-between" h="100%" align="center">
+        <Group justify="space-between" h="auto" align="center" wrap="nowrap">
           {/* Left: Search Icon */}
-          <ActionIcon variant="transparent" size="lg" className="text-gray-800 dark:text-gray-200">
-            <Search size={20} onClick={() => router.push("/discover")} />
+          <ActionIcon 
+            variant="transparent" 
+            size="lg"
+            className="text-gray-600 hover:text-orange-600 cursor-pointer dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex-shrink-0"
+            onClick={() => router.push("/discover")}
+          >
+            <Search size={20} />
           </ActionIcon>
 
           {/* Center: Main Navigation Tabs */}
           <Tabs value={activeTab} onChange={(value) => setActiveTab(value || "latest")} variant="unstyled">
-            <Tabs.List>
+            <Tabs.List style={{ overflow: "hidden", flexShrink: 1 }}>
               {mainTabs.map((tab) => (
                 <Tabs.Tab
                   key={tab.value}
@@ -55,11 +61,13 @@ export function FeedHeader() {
                       baseStyles: {
                         fontSize: "16px",
                         fontWeight: 500,
-                        padding: "8px 3px",
+                        padding: "8px 8px",
                         borderBottom: activeTab === tab.value ? "2px solid #ff6b35 " : "none",
                         backgroundColor: "transparent",
                         cursor: "pointer",
-                        margin: "0 15px",
+                        margin: "0 8px",
+                        whiteSpace: "nowrap",
+                        minWidth: "auto",
                       }
                     }
                   )}
@@ -77,7 +85,11 @@ export function FeedHeader() {
           {/* Right: Filter Icon */}
           <FilterDialog
             trigger={
-              <ActionIcon variant="transparent" size="lg" className="text-gray-800 dark:text-gray-200">
+              <ActionIcon 
+                variant="transparent" 
+                size="lg"
+                className="text-gray-600 hover:text-orange-600 cursor-pointer dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex-shrink-0"
+              >
                 <Filter size={20} />
               </ActionIcon>
             }

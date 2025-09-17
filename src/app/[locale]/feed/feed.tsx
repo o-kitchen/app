@@ -36,8 +36,8 @@ export function Feed() {
             {error}
           </div>
         )}
-        {/* 新帖子提示 */}
-        {newPostsAvailable && (
+        {/* 新帖子提示-暂时不使用 */}
+        {/*newPostsAvailable && (
           <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
             <Button
               onClick={handleLoadNewPosts}
@@ -60,16 +60,12 @@ export function Feed() {
           emptyText="No More"
           skeletonCount={4}
         />
-        {/* 加载更多按钮 */}
-        {hasMore && (
+        {/* 自动加载 */}
+        {loadingMore && (
           <div className="flex justify-center mt-6 mb-12">
-            <Button
-              onClick={handleLoadMore}
-              disabled={loadingMore}
-              className="chip-button text-white"
-            >
-              {loadingMore ? <>Loading...</> : <>Load More</>}
-            </Button>
+            <div className="chip-button text-white px-4 py-2 rounded">
+              Loading more posts...
+            </div>
           </div>
         )}
         {/* 浮动操作栏 */}
