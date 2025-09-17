@@ -102,7 +102,7 @@ export const CommentView = ({
         {!showReplyArea && (
           <Button
             variant="ghost"
-            className="text-sm text-muted-foreground hover:text-foreground p-0 h-auto"
+            className="text-sm text-muted-foreground hover:text-foreground p-0 h-auto text-black dark:text-white"
             onClick={() => {
               if (isAtMaxNesting && onMaxNestingReached) {
                 onMaxNestingReached(comment);

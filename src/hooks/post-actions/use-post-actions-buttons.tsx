@@ -4,6 +4,7 @@ import { Post } from "@lens-protocol/client";
 import { Heart, MessageCircle, Bookmark, Share2 } from "lucide-react";
 import React, { JSXElementConstructor, ReactElement } from "react";
 import { usePostActions } from "@/hooks/post-actions/use-post-actions";
+import { useRouter } from "next/navigation";
 
 type ActionButtonConfig = {
   icon:any;
@@ -13,7 +14,7 @@ type ActionButtonConfig = {
   fillColor: string;
   isActive?: boolean;
   shouldIncrementOnClick: boolean;
-  onClick?: () => Promise<any> | undefined;
+  onClick?: () => Promise<any> | void;
   renderPopover?: (
     trigger: ReactElement<any, string | JSXElementConstructor<any>>,
   ) => ReactElement<any, string | JSXElementConstructor<any>>;
@@ -41,15 +42,32 @@ export const usePostActionsButtons = ({
 }: {
   post: Post;
 }): PostActionButtons => {
+  const router = useRouter();
   const {
-    handleComment,
+    //handleComment,
     handleBookmark,
     handleLike,
-    isCommentSheetOpen,
+    //isCommentSheetOpen,
     stats,
     operations,
     isLoggedIn,
   } = usePostActions(post);
+
+  const handleComment = () => {
+    router.push(`/p/${post.id}`);
+    /*
+    // 延迟滚动到评论区域，确保页面已加载
+    setTimeout(() => {
+      const commentSection = document.getElementById('comment-section');
+      if (commentSection) {
+        commentSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 500);
+    */
+  };
 
   const likes = stats.upvotes;
   const comments = stats.comments;
@@ -77,9 +95,9 @@ export const usePostActionsButtons = ({
       initialCount: comments,
       strokeColor: "rgb(59, 130, 246)", // blue-500
       fillColor: "rgba(59, 130, 246, 0.8)",
-      onClick: () => handleComment(false),
+      onClick: handleComment,
       shouldIncrementOnClick: false,
-      isActive: isCommentSheetOpen,
+      //isActive: false,
       isDisabled: false,
       isUserLoggedIn: isLoggedIn,
     },
@@ -115,6 +133,7 @@ export const usePostActionsButtons = ({
           },
         },
       ],
+      isDisabled: true,
     },
   };
 

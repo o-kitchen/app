@@ -60,10 +60,12 @@ export default function PostPage() {
         <StorageDisplay post={post} className="mt-6" />
         
         {/* Comments Section */}
-        <CommentSection
-          post={post}
-          className="mt-4"
-        />
+        <div id="comment-section">
+          <CommentSection
+            post={post}
+            className="mt-4"
+          />
+        </div>
         
         {/* Comment Sheet - Commented out for now */}
         {/* <CommentSheet 

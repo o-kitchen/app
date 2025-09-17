@@ -52,7 +52,7 @@ export const CommentReactions = ({
           size="sm"
           onClick={handleShowReplies}
           disabled={!hasReplies || isLoadingReplies}
-          className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-black dark:text-white"
         >
           <MessageCircle className="w-4 h-4" />
           {isLoadingReplies ? "Loading..." : stats?.comments || 0}
