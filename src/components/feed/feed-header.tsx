@@ -50,7 +50,7 @@ export function FeedHeader() {
 
           {/* Center: Main Navigation Tabs */}
           <Tabs value={activeTab} onChange={(value) => setActiveTab(value || "latest")} variant="unstyled">
-            <Tabs.List style={{ overflow: "hidden", flexShrink: 1 }}>
+            <Tabs.List style={{ overflow: "hidden", flexShrink: 1, flexWrap: "nowrap" }}>
               {mainTabs.map((tab) => (
                 <Tabs.Tab
                   key={tab.value}
@@ -61,13 +61,14 @@ export function FeedHeader() {
                       baseStyles: {
                         fontSize: "16px",
                         fontWeight: 500,
-                        padding: "8px 8px",
+                        padding: "5px 5px",
                         borderBottom: activeTab === tab.value ? "2px solid #ff6b35 " : "none",
                         backgroundColor: "transparent",
                         cursor: "pointer",
-                        margin: "0 8px",
+                        margin: "0 7px",
                         whiteSpace: "nowrap",
                         minWidth: "auto",
+                        flexShrink: 1,
                       }
                     }
                   )}

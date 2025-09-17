@@ -17,13 +17,13 @@ const RATING_OPTIONS = [
     value: "general-rate",
     label: "全年龄",
     description: "适合所有年龄段的内容",
-    icon: <Star className="h-4 w-4 text-green-500" />,
+    icon: <Star className="h-4 w-4 text-orange-500" />,
   },
   {
     value: "teen-rate",
     label: "青少年级",
     description: "可能不适合13岁以下的内容",
-    icon: <AlertTriangle className="h-4 w-4 text-yellow-500" />,
+    icon: <AlertTriangle className="h-4 w-4 text-orange-500" />,
   },
   {
     value: "mature-rate",
@@ -35,7 +35,7 @@ const RATING_OPTIONS = [
     value: "explicit-rate",
     label: "限制级",
     description: "包含严重露骨的暴力、色情等内容",
-    icon: <Ban className="h-4 w-4 text-red-500" />,
+    icon: <Ban className="h-4 w-4 text-orange-500" />,
   },
 ]
 
@@ -43,42 +43,42 @@ const WARNING_OPTIONS = [
   {
     value: "none-warning",
     label: "无内容预警",
-    icon: <Shield className="h-4 w-4 text-gray-400" />,
+    icon: <Shield className="h-4 w-4 text-orange-500" />,
   },
   {
     value: "ai-warning",
     label: "AI生成内容预警",
-    icon: <Brain className="h-4 w-4 text-red-500" />,
+    icon: <Brain className="h-4 w-4 text-orange-500" />,
   },
   {
     value: "violence-warning",
     label: "暴力描述预警",
-    icon: <AlertTriangle className="h-4 w-4 text-red-500" />,
+    icon: <AlertTriangle className="h-4 w-4 text-orange-500" />,
   },
   {
     value: "death-warning",
     label: "主角死亡预警",
-    icon: <Heart className="h-4 w-4 text-red-600" />,
+    icon: <Heart className="h-4 w-4 text-orange-500" />,
   },
   {
     value: "noncon-warning",
     label: "强制/非自愿预警",
-    icon: <Ban className="h-4 w-4 text-red-700" />,
+    icon: <Ban className="h-4 w-4 text-orange-500" />,
   },
   {
     value: "underage-warning",
     label: "未成年性行为预警",
-    icon: <Shield className="h-4 w-4 text-red-700" />,
+    icon: <Shield className="h-4 w-4 text-orange-500" />,
   },
 ]
 
 const CATEGORY_OPTIONS = [
-  { value: "none-relationship", label: "综合", icon: <Globe className="h-4 w-4 text-zinc-800" /> },
-  { value: "gl", label: "GL", icon: <Heart className="h-4 w-4 text-red-500" /> },
-  { value: "gb", label: "GB", icon: <Heart className="h-4 w-4 text-red-500" /> },  
-  { value: "bl", label: "BL", icon: <Heart className="h-4 w-4 text-red-500" /> },
-  { value: "gen-relationship", label: "无CP", icon: <Hash className="h-4 w-4 text-blue-500" /> },
-  { value: "multi-relationship", label: "多元", icon: <Users className="h-4 w-4 text-gray-500" /> },
+  { value: "none-relationship", label: "综合", icon: <Globe className="h-4 w-4 text-orange-500" /> },
+  { value: "gl", label: "GL", icon: <Heart className="h-4 w-4 text-orange-500" /> },
+  { value: "gb", label: "GB", icon: <Heart className="h-4 w-4 text-orange-500" /> },  
+  { value: "bl", label: "BL", icon: <Heart className="h-4 w-4 text-orange-500" /> },
+  { value: "gen-relationship", label: "无CP", icon: <Hash className="h-4 w-4 text-orange-500" /> },
+  { value: "multi-relationship", label: "多元", icon: <Users className="h-4 w-4 text-orange-500" /> },
 ]
 
 interface FilterDialogProps {
@@ -119,7 +119,8 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
       <Modal
         opened={showFilterSheet}
         onClose={() => setShowFilterSheet(false)}
-        size="70%"
+        size="lg"
+        fullScreen={true}
         title={
           <Group justify="center" gap="xs">
             <Settings size={16} />
@@ -128,13 +129,13 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
         }
       >
         <Stack gap="lg">
-          <Group grow align="stretch" gap="md">
+          <Group grow align="stretch" gap="md" className="flex-col items-center lg:flex-row lg:items-stretch lg:justify-center">
             {/* Categories Section */}
-            <Card withBorder shadow="sm" padding="md" radius="md">
+            <Card withBorder shadow="sm" padding="md" radius="md" style={{ width: '100%', maxWidth: '400px' }}>
               <Stack gap="sm">
                 <Group gap="xs">
                   <div style={{ padding: 6, background: "#f8f9fa", borderRadius: 8 }}>
-                    <Globe size={16} className="text-sky-600" />
+                    <Globe size={16} className="text-orange-500" />
                   </div>
                   <Group gap={4}>
                     <Text fw={600}>频道</Text>
@@ -167,11 +168,11 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
             </Card>
 
             {/* Rating Section */}
-            <Card withBorder shadow="sm" padding="md" radius="md">
+            <Card withBorder shadow="sm" padding="md" radius="md" style={{ width: '100%', maxWidth: '400px' }}>
               <Stack gap="sm">
                 <Group gap="xs">
                   <div style={{ padding: 6, background: "#f8f9fa", borderRadius: 8 }}>
-                    <Star size={16} className="text-green-600" />
+                    <Star size={16} className="text-orange-500" />
                   </div>
                   <Group gap={4}>
                     <Text fw={600}>分级</Text>
@@ -184,12 +185,15 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
                       key={option.value}
                       onClick={() => setSelectedSortBy(option.value)}
                       style={{
+                        minHeight: "60px",
                         padding: 12,
                         borderRadius: 8,
                         border: "2px solid",
                         borderColor: selectedSortBy === option.value ? "#868e96" : "#e9ecef",
                         background: selectedSortBy === option.value ? "#f8f9fa" : "white",
                         transition: "all 0.2s",
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
                       <Stack gap={4}>
@@ -206,11 +210,11 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
             </Card>
 
             {/* Warning Section */}
-            <Card withBorder shadow="sm" padding="md" radius="md">
+            <Card withBorder shadow="sm" padding="md" radius="md" style={{ width: '100%', maxWidth: '400px' }}>
               <Stack gap="sm">
                 <Group gap="xs">
                   <div style={{ padding: 6, background: "#f8f9fa", borderRadius: 8 }}>
-                    <AlertTriangle size={16} className="text-orange-600" />
+                    <AlertTriangle size={16} className="text-orange-500" />
                   </div>
                   <Group gap={4}>
                     <Text fw={600}>预警</Text>
@@ -231,19 +235,26 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
                         }
                       }}
                       style={{
-                        width: "calc(50% - 4px)",
+                        width: "100%",
+                        height: "60px",
                         padding: 12,
                         borderRadius: 8,
                         border: "2px solid",
                         borderColor: selectedTimeRange.includes(option.value) ? "#868e96" : "#e9ecef",
                         background: selectedTimeRange.includes(option.value) ? "#f8f9fa" : "white",
                         transition: "all 0.2s",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        flexShrink: 1,
                       }}
                     >
-                      <Group gap="xs" justify="center">
+                      <Stack gap={4}>
+                        <Group gap="xs" justify="start">
                         {option.icon}
-                        <Text size="sm" fw={500}>{option.label}</Text>
-                      </Group>
+                          <Text size="sm" fw={500}>{option.label}</Text>
+                        </Group>
+                      </Stack>
                     </UnstyledButton>
                   ))}
                 </Group>
@@ -257,7 +268,7 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
               type="button"
               variant="outline"
               onClick={handleReset}
-              className="px-6"
+              className="px-6 "
             >
               重置
             </Button>

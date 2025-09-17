@@ -71,6 +71,10 @@ export function useFeed(options: useFeedOptions = {}) {
     } else if (type === "custom" && customFilter) {
       return customFilter;
     }
+    // Return empty filter for profile type when profileAddress is not available
+    if (type === "profile" && !profileAddress) {
+      return { authors: [] };
+    }
     return { feeds: [{ globalFeed: true }] };
   }, [type, profileAddress, customFilter]);
 

@@ -102,7 +102,10 @@ export default function UserPage() {
     refreshing,
     lastRefreshTime,
     handleRefresh,
-  } = useFeed({ type: "profile", profileAddress: targetProfile?.address });
+  } = useFeed({ 
+    type: "profile", 
+    profileAddress: targetProfile?.address || undefined 
+  });
 
   // 如果正在加载目标用户信息，显示加载状态
   if (profileLoading) {

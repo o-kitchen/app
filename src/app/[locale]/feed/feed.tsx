@@ -63,9 +63,13 @@ export function Feed() {
         {/* 自动加载 */}
         {loadingMore && (
           <div className="flex justify-center mt-6 mb-12">
-            <div className="chip-button text-white px-4 py-2 rounded">
-              Loading more posts...
-            </div>
+            <Button
+              onClick={handleLoadMore}
+              className="bg-gray-500 text-white shadow-lg animate-bounce"
+              size="sm"
+            >
+              Loading ...
+            </Button>
           </div>
         )}
         {/* 浮动操作栏 */}

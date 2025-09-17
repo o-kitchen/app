@@ -5,9 +5,20 @@ import { MantineProvider, createTheme } from '@mantine/core';
 import '@mantine/core/styles.css';
 
 const theme = createTheme({
-  primaryColor: 'blue',
+  primaryColor: 'gray',
   colors: {
-    // add custom colors here
+    orange: [
+      '#fff7ed',
+      '#ffedd5', 
+      '#fed7aa',
+      '#fdba74',
+      '#fb923c',
+      '#f97316',
+      '#ea580c',
+      '#c2410c',
+      '#9a3412',
+      '#7c2d12'
+    ],
   },
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   spacing: {
@@ -32,6 +43,11 @@ const theme = createTheme({
     xl: '0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04)',
   },
   components: {
+    Button: {
+      defaultProps: {
+        color: 'gray',
+      },
+    },
     Paper: {
       defaultProps: {
         shadow: 'sm',

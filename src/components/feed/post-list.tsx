@@ -55,7 +55,7 @@ export function PostList({ posts, loading, emptyText, skeletonCount = 4 }: PostL
         <div className="text-center text-gray-400 min-h-[40vh] flex items-center justify-center">
           <div>
             <div className="text-6xl mb-4 opacity-20">🕊️</div>
-            <div>{emptyText || "no content"}</div>
+            {/*<div>{emptyText || "no content"}</div>*/}
           </div>
         </div>
       </div>

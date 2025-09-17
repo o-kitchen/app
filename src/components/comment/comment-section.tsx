@@ -100,7 +100,7 @@ export function CommentSection({
         commentOn: {
           post: post.id,
         },
-        feed: evmAddress("0xd74a3C23DB0BFEA48007BeA447a5D20C422242fb")//o-kitchen works-feed for uploading fanworks on o-kitchen
+        //feed: evmAddress("0xd74a3C23DB0BFEA48007BeA447a5D20C422242fb")//o-kitchen works-feed for uploading fanworks on o-kitchen
       })
         .andThen(handleOperationWith(walletClient))
         .andThen(sessionClient.waitForTransaction);
