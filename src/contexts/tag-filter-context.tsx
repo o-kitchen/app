@@ -6,6 +6,7 @@ export interface TagFilter {
   presetTags: string[]; // 来自FilterDialog的预设标签
   customTags: string[]; // 来自SearchDialog的自定义标签
   allTags: string[]; // 所有标签的合并
+  searchQuery?: string; // 内容搜索查询
 }
 
 interface TagFilterContextValue {
@@ -14,9 +15,11 @@ interface TagFilterContextValue {
   removePresetTag: (tag: string) => void;
   addCustomTag: (tag: string) => void;
   removeCustomTag: (tag: string) => void;
+  setSearchQuery: (query: string | undefined) => void;
   clearAllTags: () => void;
   clearPresetTags: () => void;
   clearCustomTags: () => void;
+  clearSearchQuery: () => void;
   hasActiveFilters: boolean;
 }
 
@@ -29,6 +32,7 @@ interface TagFilterProviderProps {
 export function TagFilterProvider({ children }: TagFilterProviderProps) {
   const [presetTags, setPresetTags] = useState<string[]>([]);
   const [customTags, setCustomTags] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
 
   // 计算所有标签
   const allTags = [...new Set([...presetTags, ...customTags])];
@@ -68,12 +72,17 @@ export function TagFilterProvider({ children }: TagFilterProviderProps) {
     setCustomTags([]);
   }, []);
 
-  const hasActiveFilters = allTags.length > 0;
+  const clearSearchQuery = useCallback(() => {
+    setSearchQuery(undefined);
+  }, []);
+
+  const hasActiveFilters = allTags.length > 0 || !!searchQuery;
 
   const tagFilter: TagFilter = {
     presetTags,
     customTags,
     allTags,
+    searchQuery,
   };
 
   const value: TagFilterContextValue = {
@@ -82,9 +91,11 @@ export function TagFilterProvider({ children }: TagFilterProviderProps) {
     removePresetTag,
     addCustomTag,
     removeCustomTag,
+    setSearchQuery,
     clearAllTags,
     clearPresetTags,
     clearCustomTags,
+    clearSearchQuery,
     hasActiveFilters,
   };
 

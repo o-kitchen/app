@@ -1,7 +1,7 @@
 "use client"
 
 import { Group, ActionIcon, Tabs, Box, Badge, Flex, Text, Stack } from "@mantine/core"
-import { Search, Filter, X, Hash } from "lucide-react"
+import { Search, Filter, X, Hash, FileText } from "lucide-react"
 import { useState } from "react"
 import { useDisabled } from "@/utils/disabled"
 import { FilterDialog } from "@/components/dialogs/filter-dialog"
@@ -22,6 +22,7 @@ export function FeedHeader() {
     tagFilter, 
     removePresetTag, 
     removeCustomTag,
+    clearSearchQuery,
     hasActiveFilters 
   } = useTagFilter()
   const mainTabs = [
@@ -124,18 +125,19 @@ export function FeedHeader() {
         >
           <Stack gap="sm">
             <Group gap="xs" align="center">
-              <Hash size={16} className="text-orange-500" />
               <Text size="sm" fw={500} c="dimmed">
-                已选标签
+                筛选结果
               </Text>
             </Group>
             <Flex wrap="wrap" gap="xs">
+              {/* 标签 */}
               {tagFilter.allTags.map((tag) => (
                 <Badge
                   key={tag}
                   variant="light"
                   color="orange"
                   size="lg"
+                  leftSection={<Hash size={14} className="text-orange-500" />}
                   rightSection={
                     <X 
                       size={12} 
@@ -153,6 +155,24 @@ export function FeedHeader() {
                   {tag}
                 </Badge>
               ))}
+              {/* 内容 */}
+              {tagFilter.searchQuery && (
+                  <Badge
+                    variant="light"
+                    color="orange"
+                    size="lg"
+                    leftSection={<FileText size={14} className="text-orange-500" />}
+                    rightSection={
+                      <X 
+                        size={12} 
+                        style={{ cursor: "pointer" }}
+                        onClick={clearSearchQuery}
+                      />
+                    }
+                  >
+                    {tagFilter.searchQuery}
+                  </Badge>
+              )}
             </Flex>
           </Stack>
         </Box>

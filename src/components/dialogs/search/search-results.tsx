@@ -112,6 +112,10 @@ export function SearchResults({ searchValue, selectedType, isLoading = true, fee
     return null
   }
 
+  if (selectedType === "content") {
+    return null
+  }
+
   const { colorScheme } = useMantineColorScheme()
   const theme = useMantineTheme()
 
@@ -119,7 +123,7 @@ export function SearchResults({ searchValue, selectedType, isLoading = true, fee
     switch (selectedType) {
       case "people":
         return <PeopleSkeleton />
-      case "content":
+      //case "content":
       case "token":
         return <PostCardSkeleton />
       case "tag":

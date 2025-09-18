@@ -83,6 +83,11 @@ export function useFeed(options: useFeedOptions = {}) {
       baseFilter = { feeds: [{ globalFeed: true }] };
     }
     
+    // 添加搜索查询
+    if (tagFilter.searchQuery) {
+      baseFilter.searchQuery = tagFilter.searchQuery;
+    }
+    
     // 添加标签筛选 - all字段
     if (tagFilter.allTags.length > 0) {
       baseFilter.metadata = {
@@ -92,7 +97,7 @@ export function useFeed(options: useFeedOptions = {}) {
     }
     
     return baseFilter;
-  }, [type, profileAddress, customFilter, tagFilter.allTags]);
+  }, [type, profileAddress, customFilter, tagFilter.allTags, tagFilter.searchQuery]);
 
 
 

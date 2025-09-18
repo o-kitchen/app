@@ -40,8 +40,8 @@ interface SearchHistoryItem {
 
 const searchTypeConfig = {
   tag: { icon: Hash, label: "Tag" },
-  people: { icon: User, label: "People" },
   content: { icon: FileText, label: "Content" },
+  people: { icon: User, label: "User" },
   token: { icon: Key, label: "Token ID" },
 }
 
@@ -58,7 +58,8 @@ export function SearchDialog({ opened, onClose }: SearchDialogProps) {
   const [isSearching, setIsSearching] = useState(false)
   
   const { 
-    addCustomTag, 
+    addCustomTag,
+    setSearchQuery,
   } = useTagFilter()
   
   // 使用feed hook获取帖子数据
@@ -72,7 +73,7 @@ export function SearchDialog({ opened, onClose }: SearchDialogProps) {
       // Simulate search delay
       setTimeout(() => {
         setIsSearching(false)
-      }, 1500)
+      }, 1000)
     }
   }, [selectedType, searchValue])
 
@@ -89,6 +90,8 @@ export function SearchDialog({ opened, onClose }: SearchDialogProps) {
 
       if (selectedType === "tag") {
         addCustomTag(searchValue.trim())
+      } else if (selectedType === "content") {
+        handleContentSearch(searchValue.trim())
       }
 
       // Simulate search delay
@@ -96,6 +99,11 @@ export function SearchDialog({ opened, onClose }: SearchDialogProps) {
         setIsSearching(false)
       }, 2000)
     }
+  }
+
+  const handleContentSearch = async (query: string) => {
+    // 设置搜索查询到Context，让feed自动更新
+    setSearchQuery(query)
   }
 
   const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
