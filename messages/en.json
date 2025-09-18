@@ -23,7 +23,7 @@
   },
   "feedHeader":{
     "follow": "Follow",
-    "home": "Discover",
+    "explore": "Discover",
     "latest": "Latest"
   },
   "common": {

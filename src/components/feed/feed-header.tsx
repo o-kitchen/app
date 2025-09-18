@@ -17,8 +17,8 @@ export function FeedHeader() {
   const feedHeaderT = useTranslations("feedHeader");
   const mainTabs = [
     { value: "follow", label: feedHeaderT("follow"), disabled: true },
-    { value: "home", label: feedHeaderT("home"),disabled: true },
     { value: "latest", label: feedHeaderT("latest"), disabled: false },
+    { value: "explore", label: feedHeaderT("explore"),disabled: true },
   ]
 
   //const router = useRouter()
