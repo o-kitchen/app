@@ -29,6 +29,7 @@ import {
 } from "lucide-react"
 import { SearchResults } from "@/components/dialogs/search/search-results"
 import { useTagFilter } from "@/contexts/tag-filter-context"
+import { useFeed } from "@/hooks/use-feed"
 
 interface SearchHistoryItem {
   id: string
@@ -59,6 +60,10 @@ export function SearchDialog({ opened, onClose }: SearchDialogProps) {
   const { 
     addCustomTag, 
   } = useTagFilter()
+  
+  // 使用feed hook获取帖子数据
+  const { posts } = useFeed()
+  
   const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([])
 
   useEffect(() => {
@@ -223,7 +228,16 @@ export function SearchDialog({ opened, onClose }: SearchDialogProps) {
         </Group>
 
         {searchValue.trim() ? (
-          <SearchResults searchValue={searchValue} selectedType={selectedType} isLoading={isSearching} />
+          <SearchResults 
+            searchValue={searchValue} 
+            selectedType={selectedType} 
+            isLoading={isSearching}
+            feedPosts={posts}
+            onTagClick={(tag) => {
+              addCustomTag(tag)
+              onClose()
+            }}
+          />
         ) : (
           <Stack gap="sm">
             <Group justify="space-between" align="center">
