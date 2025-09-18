@@ -1,11 +1,12 @@
 "use client"
 
-import { Group, ActionIcon, Tabs, Box } from "@mantine/core"
-import { Search, Filter } from "lucide-react"
+import { Group, ActionIcon, Tabs, Box, Badge, Flex, Text, Stack } from "@mantine/core"
+import { Search, Filter, X, Hash } from "lucide-react"
 import { useState } from "react"
 import { useDisabled } from "@/utils/disabled"
 import { FilterDialog } from "@/components/dialogs/filter-dialog"
 import { SearchDialog } from "@/components/dialogs/search/search-dialog"
+import { useTagFilter } from "@/contexts/tag-filter-context"
 //import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl";
 
@@ -15,6 +16,14 @@ export function FeedHeader() {
   const [activeTab, setActiveTab] = useState("latest")
   const [searchOpened, setSearchOpened] = useState(false)
   const feedHeaderT = useTranslations("feedHeader");
+  
+  // 使用标签筛选上下文
+  const { 
+    tagFilter, 
+    removePresetTag, 
+    removeCustomTag,
+    hasActiveFilters 
+  } = useTagFilter()
   const mainTabs = [
     { value: "follow", label: feedHeaderT("follow"), disabled: true },
     { value: "latest", label: feedHeaderT("latest"), disabled: false },
@@ -102,6 +111,52 @@ export function FeedHeader() {
           
         </Group>
       </Box>
+
+      {/* Active Tags Display */}
+      {hasActiveFilters && (
+        <Box
+          px={{ base: "sm", sm: "md" }}
+          py="sm"
+          style={{
+            backgroundColor: "transparent",
+            borderTop: "1px solid #f0f0f0",
+          }}
+        >
+          <Stack gap="sm">
+            <Group gap="xs" align="center">
+              <Hash size={16} className="text-orange-500" />
+              <Text size="sm" fw={500} c="dimmed">
+                已选标签
+              </Text>
+            </Group>
+            <Flex wrap="wrap" gap="xs">
+              {tagFilter.allTags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant="light"
+                  color="orange"
+                  size="lg"
+                  rightSection={
+                    <X 
+                      size={12} 
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        if (tagFilter.presetTags.includes(tag)) {
+                          removePresetTag(tag)
+                        } else if (tagFilter.customTags.includes(tag)) {
+                          removeCustomTag(tag)
+                        }
+                      }}
+                    />
+                  }
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </Flex>
+          </Stack>
+        </Box>
+      )}
 
       {/* Search Dialog */}
       <SearchDialog 

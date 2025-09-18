@@ -4,6 +4,7 @@ import { fetchPosts } from "@lens-protocol/client/actions";
 import { useSharedPostActions } from "@/contexts/post-actions-context";
 import { useLensAuthStore } from "@/stores/auth-store";
 import { useFeedContext } from "@/contexts/feed-context";
+import { useTagFilter } from "@/contexts/tag-filter-context";
 import { evmAddress } from "@lens-protocol/client";
 import { env } from "@/lib/env";
 
@@ -39,6 +40,9 @@ export function useFeed(options: useFeedOptions = {}) {
 
   // Feed context for viewMode
   const { viewMode } = useFeedContext();
+  
+  // Tag filter context
+  const { tagFilter } = useTagFilter();
 
   // Post actions context
   const { 
@@ -64,19 +68,31 @@ export function useFeed(options: useFeedOptions = {}) {
   
   // Helper functions
   const getFilter = useCallback(() => {
+    let baseFilter: any = {};
+    
+    // 基础筛选条件
     if (type === "global") {
-      return { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)], };
+      baseFilter = { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
     } else if (type === "profile" && profileAddress) {
-      return { authors: [profileAddress] };
+      baseFilter = { authors: [profileAddress] };
     } else if (type === "custom" && customFilter) {
-      return customFilter;
+      baseFilter = customFilter;
+    } else if (type === "profile" && !profileAddress) {
+      baseFilter = { authors: [] };
+    } else {
+      baseFilter = { feeds: [{ globalFeed: true }] };
     }
-    // Return empty filter for profile type when profileAddress is not available
-    if (type === "profile" && !profileAddress) {
-      return { authors: [] };
+    
+    // 添加标签筛选 - all字段
+    if (tagFilter.allTags.length > 0) {
+      baseFilter.metadata = {
+        ...baseFilter.metadata,
+        tags: { all: tagFilter.allTags }
+      };
     }
-    return { feeds: [{ globalFeed: true }] };
-  }, [type, profileAddress, customFilter]);
+    
+    return baseFilter;
+  }, [type, profileAddress, customFilter, tagFilter.allTags]);
 
 
 
@@ -91,9 +107,7 @@ export function useFeed(options: useFeedOptions = {}) {
       else setLoading(true);
       setError(null);
       
-      const filter = type === "global" 
-        ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
-        : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+      const filter = getFilter();
         
       const result = await fetchPosts(sessionClient || client, {
         filter,
@@ -153,9 +167,7 @@ export function useFeed(options: useFeedOptions = {}) {
     if (!client) return;
 
     try {
-      const filter = type === "global" 
-        ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
-        : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+      const filter = getFilter();
         
       const result = await fetchPosts(sessionClient || client, {
         filter,
@@ -223,9 +235,7 @@ export function useFeed(options: useFeedOptions = {}) {
         setLoading(true);
         setError(null);
         
-        const filter = type === "global" 
-          ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
-          : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+        const filter = getFilter();
           
         const result = await fetchPosts(sessionClient || client, {
           filter,
@@ -270,9 +280,7 @@ export function useFeed(options: useFeedOptions = {}) {
       if (!client) return;
 
       try {
-        const filter = type === "global" 
-          ? { apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] }
-          : { ...getFilter(), apps: [evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)] };
+        const filter = getFilter();
           
         const result = await fetchPosts(sessionClient || client, {
           filter,
@@ -305,7 +313,7 @@ export function useFeed(options: useFeedOptions = {}) {
       if (intervalRef.current) clearInterval(intervalRef.current);
       window.removeEventListener('focus', handleFocus);
     };
-  }, [client, sessionClient, isAuthReady, type, profileAddress, customFilter, viewMode]);
+  }, [client, sessionClient, isAuthReady, type, profileAddress, customFilter, viewMode, tagFilter.allTags]);
 
   const hasMore = !!(paginationInfo?.next && paginationInfo.next !== null);
 
