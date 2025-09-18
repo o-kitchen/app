@@ -2,11 +2,12 @@
 
 import { Post } from "@lens-protocol/client";
 import { Heart, MessageCircle, Bookmark, Share2 } from "lucide-react";
-import React, { JSXElementConstructor, ReactElement } from "react";
+import { JSXElementConstructor, ReactElement } from "react";
 import { usePostActions } from "@/hooks/post-actions/use-post-actions";
+import { toast } from "sonner";
 
 type ActionButtonConfig = {
-  icon:any;
+  icon: any;
   label: string;
   initialCount: number;
   strokeColor: string;
@@ -50,6 +51,40 @@ export const usePostActionsButtons = ({
     operations,
     isLoggedIn,
   } = usePostActions(post);
+
+  // Helper function to share post using Web Share API
+  const handleShare = async () => {
+    // Extract title from post metadata
+    const title = "title" in post.metadata && typeof post.metadata.title === "string" && post.metadata.title.trim() !== ""
+      ? post.metadata.title
+      : "content" in post.metadata && typeof post.metadata.content === "string" && post.metadata.content.trim() !== ""
+        ? post.metadata.content.substring(0, 50) + "..."
+        : "Check out this post";
+
+    // Extract text/description from post metadata
+    const text = "content" in post.metadata && typeof post.metadata.content === "string" && post.metadata.content.trim() !== ""
+      ? post.metadata.content.length > 100
+        ? post.metadata.content.substring(0, 100) + "..."
+        : post.metadata.content
+      : title;
+
+    // Generate post URL
+    const postUrl = `${window.location.origin}/p/${post.id}`;
+
+    try {
+      await navigator.share({
+        title: title,
+        text: text,
+        url: postUrl,
+      });
+    } catch (error) {
+      // Handle user cancellation or other errors
+      if (error instanceof Error && error.name !== 'AbortError') {
+        console.error('Share failed:', error);
+        toast.error("分享失败，请重试");
+      }
+    }
+  };
 
   const likes = stats.upvotes;
   const comments = stats.comments;
@@ -103,18 +138,9 @@ export const usePostActionsButtons = ({
       strokeColor: "rgb(107, 114, 128)", // gray-500
       fillColor: "rgba(107, 114, 128, 0.8)",
       shouldIncrementOnClick: false,
+      onClick: handleShare,
       hideCount: true,
       isUserLoggedIn: isLoggedIn,
-      dropdownItems: [
-        {
-          icon: Share2,
-          label: "Copy Link",
-          onClick: () => {
-            // TODO: Implement copy link functionality
-            console.log("Copy link clicked");
-          },
-        },
-      ],
     },
   };
 
