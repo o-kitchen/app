@@ -5,6 +5,7 @@ import { Heart, MessageCircle, Bookmark, Share2 } from "lucide-react";
 import { JSXElementConstructor, ReactElement } from "react";
 import { usePostActions } from "@/hooks/post-actions/use-post-actions";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 type ActionButtonConfig = {
   icon: any;
@@ -42,6 +43,7 @@ export const usePostActionsButtons = ({
 }: {
   post: Post;
 }): PostActionButtons => {
+  const t = useTranslations("post");
   const {
     handleComment,
     handleBookmark,
@@ -81,7 +83,7 @@ export const usePostActionsButtons = ({
       // Handle user cancellation or other errors
       if (error instanceof Error && error.name !== 'AbortError') {
         console.error('Share failed:', error);
-        toast.error("分享失败，请重试");
+        toast.error(t("shareError"));
       }
     }
   };
