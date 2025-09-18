@@ -208,10 +208,10 @@ export function ArtCreateForm({ onClose, onComplete }: ArtCreateFormProps) {
       return;
     }
 
-    if (!content.trim()) {
+    /*if (!content.trim()) {
     toast.error("Please enter some content !")
     return
-    }
+    }*/
 
     if (isOriginal && !licenseType) {
       toast.error("Please select a license for your license Type !")
