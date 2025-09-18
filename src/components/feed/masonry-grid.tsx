@@ -47,7 +47,7 @@ interface MasonryGridProps {
 export function MasonryGrid({ 
   children, 
   loading = false, 
-  skeletonCount = 12,
+  skeletonCount = 4,
   columns = { base: 2, xs: 2, sm: 3, md: 4, lg: 4 },
   spacing,
   containerSize = "xl"
@@ -59,7 +59,7 @@ export function MasonryGrid({
     columns.base || 2,
     columns.xs || 2,
     columns.sm || 3,
-    columns.md || 3,
+    columns.md || 4,
     columns.lg || 4
   );
 

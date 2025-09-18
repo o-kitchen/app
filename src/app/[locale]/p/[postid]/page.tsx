@@ -8,16 +8,12 @@ import { FeedFloatingActions } from "@/components/feed/feed-floating-actions";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackButton } from "@/components/ui/back-button";
 import { StorageDisplay } from "@/components/ui/storage-display";
-import { CommentSection } from "@/components/ui/comment-section";
-import { useComments } from "@/hooks/use-comments";
+import { CommentSection } from "@/components/comment/comment-section";
 
 export default function PostPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const postId = params.postid as string;
-  
-  // 评论功能
-  const isInlineMode = true;
   
   const { 
     post,
@@ -26,17 +22,6 @@ export default function PostPage() {
   } = usePost({
     postId,
     autoFetch: true
-  });
-
-  const {
-    comments,
-    loading: commentsLoading,
-    error: commentsError,
-    addComment,
-    refetch: refetchComments
-  } = useComments({
-    postId,
-    autoFetch: isInlineMode
   });
 
   if (loading) {
@@ -74,15 +59,13 @@ export default function PostPage() {
         {/* Storage API Section */}
         <StorageDisplay post={post} className="mt-6" />
         
-        {/* Comments Section - Only show in inline mode */}
-        {isInlineMode && (
+        {/* Comments Section */}
+        <div id="comment-section">
           <CommentSection
-            postId={postId}
-            comments={comments}
-            onAddComment={addComment}
+            post={post}
             className="mt-4"
           />
-        )}
+        </div>
         
         {/* Comment Sheet - Commented out for now */}
         {/* <CommentSheet 

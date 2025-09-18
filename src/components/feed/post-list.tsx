@@ -14,7 +14,7 @@ interface PostListProps {
   skeletonCount?: number;
 }
 
-export function PostList({ posts, loading, emptyText, showToggle = true, skeletonCount = 6 }: PostListProps) 
+export function PostList({ posts, loading, emptyText, skeletonCount = 4 }: PostListProps) 
 {
   const { viewMode } = useFeedContext();
   const theme = useMantineTheme();
@@ -28,7 +28,7 @@ export function PostList({ posts, loading, emptyText, showToggle = true, skeleto
           <MasonryGrid
             loading={true}
             skeletonCount={skeletonCount}
-            columns={{ base: 2, xs: 2, sm: 3, md: 5, lg: 5 }}
+            columns={{ base: 2, xs: 2, sm: 3, md: 4, lg: 4 }}
           >
             {[]}
           </MasonryGrid>
@@ -55,7 +55,7 @@ export function PostList({ posts, loading, emptyText, showToggle = true, skeleto
         <div className="text-center text-gray-400 min-h-[40vh] flex items-center justify-center">
           <div>
             <div className="text-6xl mb-4 opacity-20">🕊️</div>
-            <div>{emptyText || "no content"}</div>
+            {/*<div>{emptyText || "no content"}</div>*/}
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@ export function PostList({ posts, loading, emptyText, showToggle = true, skeleto
         <MasonryGrid
           loading={loading && items.length > 0}
           skeletonCount={skeletonCount}
-          columns={{ base: 2, xs: 2, sm: 3, md: 5, lg: 5 }}
+          columns={{ base: 2, xs: 2, sm: 3, md: 4, lg: 4 }}
         >
           {items.map((post) => (
             <CompactPostCard key={post?.id} post={post} />
