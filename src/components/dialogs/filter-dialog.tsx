@@ -138,7 +138,7 @@ export function FilterDialog({ trigger, onFiltersChange }: FilterDialogProps) {
         title={
           <Group justify="center" gap="xs">
             <Settings size={16} />
-            <Text fw={600} size="lg">投稿分类筛选器(并选)</Text>
+            <Text fw={600} size="lg" c="#1c1c1c">投稿分类筛选器-并选</Text>
           </Group>
         }
       >

@@ -26,6 +26,19 @@ import { useLocale } from "next-intl";
 import { useRouter as useIntlRouter } from "@/i18n/navigation";
 import { useReconnectWallet } from "@/hooks/auth/use-reconnect-wallet";
 import { UploadDialog } from "./dialogs/upload/upload-dialog";
+import { 
+  AppShell,
+  Container, 
+  Group, 
+  Button as MantineButton, 
+  Burger, 
+  Drawer,
+  Stack,
+  Text,
+  ActionIcon,
+  useMantineColorScheme,
+} from "@mantine/core";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 export default function Header() {
   const t = useTranslations("header");
@@ -44,6 +57,9 @@ export default function Header() {
   const locale = useLocale();
   const intlRouter = useIntlRouter();
   const reconnectWallet = useReconnectWallet();
+  const [opened, { toggle, close }] = useDisclosure(false);
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // TODO: fix this
   const handleLanguageChange = (newLocale: string) => {
@@ -69,8 +85,8 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: navT("feed"), icon: Home },
-    { href: '/discover', label: navT('discover'), icon: Compass },
-    { href: "/what-is-chip", label: navT("onchainProof"), icon: ScrollText },
+    //{ href: '/discover', label: navT('discover'), icon: Compass },
+    //{ href: "/what-is-chip", label: navT("onchainProof"), icon: ScrollText },
     { href: "/about", label: navT("home"), icon: Info },
   ];
 
@@ -95,341 +111,431 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed bottom-0 left-0 right-0 z-10 w-auto border-t border-gray-200 bg-white/80 backdrop-blur-md dark:bg-gray-900 dark:border-gray-800 shadow-sm 
-    md:left-0 md:top-0 md:bottom-auto md:w-16 md:h-screen md:border-r md:border-t-0 md:border-b-0 md:right-auto">
-      <div className="container mx-auto px-1 sm:px-1 lg:px-1 md:px-1">
-        <div className="flex items-center justify-between h-12 md:flex-col md:justify-start md:space-y-6 md:py-8 md:h-full">
-          {/* Mobile menu button*/}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden text-gray-600 hover:text-gray-800"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
-          
-          {/* Logo */}
-          <Link href="/" className="hidden md:flex items-center space-x-2">
-            <img src="/icon0.svg" alt="o-kitchen" className="h-10 w-10" />
-          </Link>
-          
-          {/* Desktop Navigation*/}
-          <nav className="hidden md:flex flex-col items-center space-y-4">
-            {navItems.map(({ href, label, icon: Icon }) => {
-              const isActive = pathname === href;
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`flex items-center justify-center w-10 h-10 font-medium transition-colors text-gray-600 hover:text-orange-600 cursor-pointer dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                    isActive ? "text-orange-600 bg-orange-50 dark:bg-orange-900/20" : ""
-                  }`}
-                  title={label}
-                >
-                  <Icon className="h-5 w-5" />
-                </Link>
-              );
-            })}
-          </nav>
-          
-          {/* User Actions */}
-          <div className="flex items-center space-x-4 md:flex-col md:space-x-0 md:space-y-2">
-            {/* Theme Toggle */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 md:h-10 md:w-10">
-                  {theme === "light" ? (
-                    <Sun className="h-4 w-4" />
-                  ) : theme === "dark" ? (
-                    <Moon className="h-4 w-4" />
-                  ) : (
-                    <Monitor className="h-4 w-4" />
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-40">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                  <Sun className="mr-2 h-4 w-4" />
-                  <span>Light</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  <Moon className="mr-2 h-4 w-4" />
-                  <span>Dark</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                  <Monitor className="mr-2 h-4 w-4" />
-                  <span>System</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Language Toggle */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild disabled={true}>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 md:h-10 md:w-10"
-                >
-                  <Languages className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-32" >
-                <DropdownMenuItem 
-                  onClick={() => handleLanguageChange("zh")}
-                >
-                  <span>中文</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => handleLanguageChange("en")}
-                >
-                  <span>English</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Create Button - 只在用户登录时显示 */}
-            {/*currentProfile && (
-              <Button
-                variant="default"
-                size="sm"
-                className="chip-button text-white md:h-10 md:w-10 md:p-0 rounded-full"
-                onClick={() => setUploadDialogOpened(true)}
-              >
-                <span className="md:hidden">{t("cook")}</span>
-                <Plus className="h-5 w-5 md:block hidden font-bold" />
-              </Button>
-            )*/}
-
-            {currentProfile ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="relative h-8 w-8 md:h-9 md:w-9 rounded-full"
-                  >
-                    <Avatar className="h-8 w-8 md:h-9 md:w-9 border-2 border-gray-200">
-                      <AvatarImage
-                        src={currentProfile?.metadata?.picture || "/gull.jpg"}
-                      />
-                      <AvatarFallback className="bg-gray-100 text-gray-700">
-                        {currentProfile?.username?.localName
-                          ?.charAt(0)
-                          ?.toUpperCase() || "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-56 border-gray-200"
-                  align="start"
-                  forceMount
-                >
-                  <div className="flex items-center justify-start gap-2 p-2">
-                    <div className="flex flex-col space-y-1 leading-none">
-                      <p className="font-medium dark:text-neutral-100 text-gray-800">
-                        @{currentProfile?.username?.localName || t("anonymous")}
-                      </p>
-                      <p className="w-[200px] truncate text-sm text-muted-foreground dark:text-neutral-400">
-                        {currentProfile?.metadata?.bio || t("fanworkLover")}
-                      </p>
-                    </div>
-                  </div>
-                  <DropdownMenuSeparator className="bg-gray-200" />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      reconnectWallet();
-                    }}
-                    className="text-gray-700 hover:text-gray-900"
-                  >
-                    <Wallet className="mr-2 h-4 w-4" />
-                    <span>Address</span>
-                  </DropdownMenuItem> 
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/profile"
-                      className="text-gray-700 hover:text-gray-900"
-                    >
-                      <User className="mr-2 h-4 w-4" />
-                      {navT("profile")}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/settings"
-                      className="text-gray-700 hover:text-gray-900"
-                      style={{
-                        cursor: 'not-allowed',
-                        opacity: 0.5,
-                      }}
-                    >
-                      <Settings className="mr-2 h-4 w-4" />
-                      {t("settings")} ({t("developing")})
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-gray-200" />
-                  <DropdownMenuItem
-                    onClick={handleDisconnect}
-                    className="text-gray-700 hover:text-gray-900"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    {t("disconnect")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : isConnected ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full shrink-0"
-                  >
-                    <UserAvatar />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48" align="start" forceMount>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setProfileSelectModalOpen(true);
-                    }}
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>{t("selectProfile")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => disconnectWallet()}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>{t("logOut")}</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <ConnectKitButton.Custom>
-                {({ show }) => {
-                  return (
-                    <Button
-                      onClick={show}
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 md:h-10 md:w-10"
-                    >
-                    <Wallet/>
-                    </Button>
-                  );
-                }}
-              </ConnectKitButton.Custom>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden fixed bottom-12 left-0 right-0 border-t border-gray-200 bg-white/95 backdrop-blur-sm z-40 max-h-80 overflow-y-auto">
-            <nav className="flex flex-col space-y-2 p-4">
+    <AppShell
+      header={isDesktop ? { height: '100vh' } : undefined}
+      footer={!isDesktop ? { height: 50 } : undefined}
+      navbar={isDesktop ? { width: 64, breakpoint: 'md', collapsed: { mobile: true } } : undefined}
+      padding="md"
+    >
+      {/* Desktop Header with Mantine AppShell */}
+      {isDesktop && (
+        <AppShell.Header 
+          className="fixed left-0 top-0 bottom-auto w-16 h-screen border-r border-gray-200 bg-white/80 backdrop-blur-md dark:bg-gray-900 dark:border-gray-800 shadow-sm z-10"
+          style={{ height: '100vh' }}
+        >
+          <Container size="md" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', height: '100%', padding: '2rem 0.25rem' }}>
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2 mb-6">
+              <img src="/icon0.svg" alt="o-kitchen" className="h-10 w-10" />
+            </Link>
+            
+            {/* Desktop Navigation*/}
+            <nav className="flex flex-col items-center space-y-4 mb-6">
               {navItems.map(({ href, label, icon: Icon }) => {
                 const isActive = pathname === href;
                 return (
                   <Link
                     key={href}
                     href={href}
-                    className={`flex items-center space-x-3 text-gray-600 hover:text-gray-800 transition-colors py-2 font-medium ${
-                      isActive ? "text-orange-600" : ""
+                    className={`flex items-center justify-center w-10 h-10 font-medium transition-colors text-gray-600 hover:text-orange-600 cursor-pointer dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 ${
+                      isActive ? "text-orange-600 bg-orange-50 dark:bg-orange-900/20" : ""
                     }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    title={label}
                   >
                     <Icon className="h-5 w-5" />
-                    <span>{label}</span>
                   </Link>
                 );
               })}
-
-              {/* Mobile Theme and Language Switches */}
-              <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                {/* Theme Toggle */}
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">主题:</span>
-                  <div className="flex space-x-1">
+              {currentProfile ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
                     <Button
-                      variant={theme === "light" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setTheme("light")}
-                      className="h-8 px-2"
+                      variant="ghost"
+                      className="relative h-9 w-9 rounded-full"
                     >
-                      <Sun className="h-3 w-3" />
+                      <Avatar className="h-9 w-9 border-2 border-gray-200">
+                        <AvatarImage
+                          src={currentProfile?.metadata?.picture || "/gull.jpg"}
+                        />
+                        <AvatarFallback className="bg-gray-100 text-gray-700">
+                          {currentProfile?.username?.localName
+                            ?.charAt(0)
+                            ?.toUpperCase() || "U"}
+                        </AvatarFallback>
+                      </Avatar>
                     </Button>
-                    <Button
-                      variant={theme === "dark" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setTheme("dark")}
-                      className="h-8 px-2"
-                    >
-                      <Moon className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant={theme === "system" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setTheme("system")}
-                      className="h-8 px-2"
-                    >
-                      <Monitor className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Language Toggle */}
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">语言:</span>
-                  <div className="flex space-x-1">
-                    <Button
-                      variant={locale === "zh" ? "default" : "outline"}
-                      size="sm"
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-56 border-gray-200"
+                    align="start"
+                    forceMount
+                  >
+                    <div className="flex items-center justify-start gap-2 p-2">
+                      <div className="flex flex-col space-y-1 leading-none">
+                        <p className="font-medium dark:text-neutral-100 text-gray-800">
+                          @{currentProfile?.username?.localName || t("anonymous")}
+                        </p>
+                        <p className="w-[200px] truncate text-sm text-muted-foreground dark:text-neutral-400">
+                          {currentProfile?.metadata?.bio || t("fanworkLover")}
+                        </p>
+                      </div>
+                    </div>
+                    <DropdownMenuSeparator className="bg-gray-200" />
+                    <DropdownMenuItem
                       onClick={() => {
-                        handleLanguageChange("zh");
-                        setIsMobileMenuOpen(false);
+                        reconnectWallet();
                       }}
-                      className="h-8 px-2"
+                      className="text-gray-700 hover:text-gray-900"
                     >
-                      中
-                    </Button>
+                      <Wallet className="mr-2 h-4 w-4" />
+                      <span>Address</span>
+                    </DropdownMenuItem> 
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/profile"
+                        className="text-gray-700 hover:text-gray-900"
+                      >
+                        <User className="mr-2 h-4 w-4" />
+                        {navT("profile")}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/settings"
+                        className="text-gray-700 hover:text-gray-900"
+                        style={{
+                          cursor: 'not-allowed',
+                          opacity: 0.5,
+                        }}
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        {t("settings")} ({t("developing")})
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-gray-200" />
+                    <DropdownMenuItem
+                      onClick={handleDisconnect}
+                      className="text-gray-700 hover:text-gray-900"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      {t("disconnect")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : isConnected ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
                     <Button
-                      variant={locale === "en" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => {
-                        handleLanguageChange("en");
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="h-8 px-2"
+                      variant="outline"
+                      size="icon"
+                      className="rounded-full shrink-0"
                     >
-                      EN
+                      <UserAvatar />
                     </Button>
-                  </div>
-                </div>
-              </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-48" align="start" forceMount>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setProfileSelectModalOpen(true);
+                      }}
+                    >
+                      <User className="mr-2 h-4 w-4" />
+                      <span>{t("selectProfile")}</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => disconnectWallet()}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>{t("logOut")}</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <ConnectKitButton.Custom>
+                  {({ show }) => {
+                    return (
+                      <Button
+                        onClick={show}
+                        variant="ghost" 
+                        size="icon" 
+                        className={`flex items-center justify-center w-10 h-10 font-medium transition-colors text-gray-600 cursor-pointer dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800
+                          hover:text-orange-600 dark:hover:bg-orange-900/20 [&_svg]:!w-5 [&_svg]:!h-5
+                        `}
+                      >
+                      <Wallet/>
+                      </Button>
+                    );
+                  }}
+                </ConnectKitButton.Custom>
+              )}
 
-              {/* {!currentProfile && (
+              {/* 发布按钮 */}
+              <Button
+                variant="default"
+                size="icon"
+                className="w-8 h-8 bg-orange-500 hover:bg-orange-600 text-white rounded-full"
+                onClick={() => setUploadDialogOpened(true)}
+                title="发布内容"
+              >
+                <Plus className="h-5 w-5" strokeWidth={2.5} />
+              </Button>
+            </nav>
+            
+            {/* User Actions */}
+            <div className="flex flex-col items-center space-y-2 mt-auto">
+              {/* Theme Toggle */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-10 w-10">
+                    {theme === "light" ? (
+                      <Sun className="h-4 w-4" />
+                    ) : theme === "dark" ? (
+                      <Moon className="h-4 w-4" />
+                    ) : (
+                      <Monitor className="h-4 w-4" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="w-40">
+                  <DropdownMenuItem onClick={() => setTheme("light")}>
+                    <Sun className="mr-2 h-4 w-4" />
+                    <span>Light</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    <Moon className="mr-2 h-4 w-4" />
+                    <span>Dark</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>
+                    <Monitor className="mr-2 h-4 w-4" />
+                    <span>System</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Language Toggle */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild disabled={false}>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-10 w-10"
+                  >
+                    <Languages className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="w-32" >
+                  <DropdownMenuItem 
+                    onClick={() => handleLanguageChange("zh")}
+                  >
+                    <span>中文</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleLanguageChange("en")}
+                  >
+                    <span>English</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+            </div>
+          </Container>
+        </AppShell.Header>
+      )}
+
+      {/* Mobile Footer with Mantine AppShell */}
+      {!isDesktop && (
+        <AppShell.Footer 
+          className="border-t border-gray-200 bg-white/80 backdrop-blur-md dark:bg-gray-900 dark:border-gray-800 shadow-sm"
+        >
+          <Container size="md" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+            {/* 汉堡菜单按钮 - 靠左 */}
+            <Burger 
+              opened={opened} 
+              onClick={toggle} 
+              size="sm"
+              color="gray"
+            />
+
+            {/* 导航按钮组 - 居中 */}
+            <Group gap="xs" style={{ justifyContent: 'center' }}>
+              {/* 主页按钮 */}
+              <MantineButton
+                variant={pathname === "/" ? "filled" : "subtle"}
+                color={pathname === "/" ? "orange" : "gray"}
+                size="lg"
+                component={Link}
+                href="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-full"
+              >
+                {/*navT("feed")*/}
+                {<Home className="h-5 w-5" />}
+              </MantineButton>
+
+              {/* 发布按钮 */}
+                <MantineButton
+                  variant="subtle"
+                  color="orange"
+                  size="lg"
+                  onClick={() => {
+                    setUploadDialogOpened(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="rounded-full"
+                >
+                  <Plus className="h-6 w-6" strokeWidth={3} />
+                </MantineButton>
+
+              {/* 钱包按钮 */}
+              {currentProfile ? (
+                <MantineButton
+                  variant="subtle"
+                  color="gray"
+                  size="lg"
+                  //leftSection={<Wallet className="h-4 w-4" />}
+                  className="rounded-full"
+
+                  onClick={() => {
+                    reconnectWallet();
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  {/*t("wallet")*/}
+                  {<Wallet className="h-5 w-5" />}
+                </MantineButton>
+              ) : isConnected ? (
+                <MantineButton
+                  variant="subtle"
+                  color="gray"
+                  size="lg"
+                  //leftSection={<User className="h-4 w-4" />}
+                  className="rounded-full"
+                  onClick={() => {
+                    setProfileSelectModalOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  {/*t("selectProfile")*/}
+                  {<User className="h-5 w-5" />}
+                </MantineButton>
+              ) : (
                 <ConnectKitButton.Custom>
                   {({ show }) => (
-                    <Button
-                      onClick={() => {
-                        if (show) show()
-                        setIsMobileMenuOpen(false)
-                      }}
+                    <MantineButton
+                      variant="subtle"
+                      color="gray"
+                      size="lg"
+                      //leftSection={<Wallet className="h-4 w-4" />}
+                      className="rounded-full"
+                      onClick={show}
                     >
-                      Connect Wallet
-                    </Button>
+                      {/*t("connect")*/}
+                      {<Wallet className="h-5 w-5" />}
+                    </MantineButton>
                   )}
                 </ConnectKitButton.Custom>
-              )} */}
-            </nav>
-          </div>
+              )}
+            </Group>
+
+            {/* 占位元素 - 保持汉堡按钮居中 */}
+            <div style={{ width: '24px' }}></div>
+          </Container>
+        </AppShell.Footer>
+      )}
+
+        {/* 移动端抽屉菜单 */}
+        {!isDesktop && (
+          <Drawer 
+            opened={opened} 
+            onClose={close} 
+            size="25%" 
+            padding="md"
+            position="bottom"
+            withCloseButton={false}
+            styles={{
+              content: {
+                borderTopLeftRadius: '8px',
+                borderTopRightRadius: '8px',
+              }
+            }}
+          >
+            <Stack gap="md">
+              <Text size="md" fw={600} ta="center">设置</Text>
+
+              {/* 主题和语言切换 */}
+              <Group justify="space-between" mt="md" pt="md" style={{ borderTop: '1px solid #e9ecef' }}>
+                {/* 主题切换 */}
+                <Group gap="xs">
+                  <Text size="sm" c="dimmed">主题:</Text>
+                  <Group gap="xs">
+                    <ActionIcon
+                      variant={theme === "light" ? "filled" : "outline"}
+                      color={theme === "light" ? "orange" : "gray"}
+                      onClick={() => setTheme("light")}
+                    >
+                      <Sun className="h-4 w-4" />
+                    </ActionIcon>
+                    <ActionIcon
+                      variant={theme === "dark" ? "filled" : "outline"}
+                      color={theme === "dark" ? "orange" : "gray"}
+                      onClick={() => setTheme("dark")}
+                    >
+                      <Moon className="h-4 w-4" />
+                    </ActionIcon>
+                    <ActionIcon
+                      variant={theme === "system" ? "filled" : "outline"}
+                      color={theme === "system" ? "orange" : "gray"}
+                      onClick={() => setTheme("system")}
+                    >
+                      <Monitor className="h-4 w-4" />
+                    </ActionIcon>
+                  </Group>
+                </Group>
+
+                {/* 语言切换 */}
+                <Group gap="xs">
+                  <Text size="sm" c="dimmed">语言:</Text>
+                  <Group gap="xs">
+                    <MantineButton
+                      variant={locale === "zh" ? "filled" : "outline"}
+                      color={locale === "zh" ? "orange" : "gray"}
+                      size="xs"
+                      onClick={() => {
+                        handleLanguageChange("zh");
+                        close();
+                      }}
+                    >
+                      中
+                    </MantineButton>
+                    <MantineButton
+                      variant={locale === "en" ? "filled" : "outline"}
+                      color={locale === "en" ? "orange" : "gray"}
+                      size="xs"
+                      onClick={() => {
+                        handleLanguageChange("en");
+                        close();
+                      }}
+                    >
+                      EN
+                    </MantineButton>
+                  </Group>
+                </Group>
+              </Group>
+
+              {/* 关于按钮 */}
+              <MantineButton
+                variant={pathname === "/about" ? "filled" : "subtle"}
+                color={pathname === "/about" ? "orange" : "gray"}
+                size="sm"
+                component={Link}
+                href="/about"
+                leftSection={<Info className="h-4 w-4" />}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {navT("home")}
+              </MantineButton>
+            </Stack>
+          </Drawer>
         )}
-      </div>
       
       <UploadDialog
         opened={uploadDialogOpened}
@@ -437,6 +543,6 @@ export default function Header() {
         onButtonClick={handleUploadButtonClick}
         selectedAction={selectedAction}
       />
-    </header>
+    </AppShell>
   );
 }

@@ -16,7 +16,7 @@ export function isValidArticlePost(post: AnyPost): boolean {
     //!post.root &&
     // 检查是否是评论：评论会有 commentOn 字段
     !post.commentOn &&
-    // 确保是我方帖子
+    // 确保是我端帖子
     post.app?.address === evmAddress(env.NEXT_PUBLIC_APP_ADDRESS_TESTNET)
     // 确保有元数据
     //post.metadata?.__typename !== undefined
